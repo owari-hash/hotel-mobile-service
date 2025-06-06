@@ -1,5 +1,3 @@
-import { add } from 'date-fns';
-
 import { IHotelCategoryProps } from 'src/types/service';
 
 import { _mock } from './_mock';
@@ -41,70 +39,159 @@ export const SERVICE_AMENITIES_OPTIONS = [
 ];
 
 const ICONS = [
-  '/assets/icons/services/test.svg',
-  '/assets/icons/services/test.svg',
-  '/assets/icons/services/test.svg',
-  '/assets/icons/services/test.svg',
-  '/assets/icons/services/test.svg',
-  '/assets/icons/services/test.svg',
-  '/assets/icons/services/test.svg',
-  '/assets/icons/services/test.svg',
-  '/assets/icons/services/test.svg',
-  '/assets/icons/services/test.svg',
+  '/assets/icons/services/service-bell.svg',
+  '/assets/icons/services/service-extra.svg',
+  '/assets/icons/services/service-food.svg',
+  '/assets/icons/services/service-entertainment.svg',
+  '/assets/icons/services/service-taxi.svg',
+  '/assets/icons/services/service-guide.svg',
 ];
 
-// Make sure these icon files exist in your public folder at:
-// public/assets/icons/services/
+const HOTEL_SERVICES = [
+  // Өрөөний үйлчилгээ
+  {
+    title: 'Өрөө цэвэрлэх',
+    icon: 'carbon:clean',
+    category: 'Өрөөний үйлчилгээ',
+    price: 25000,
+  },
+  {
+    title: 'Өрөөний үйлчилгээ',
+    icon: 'carbon:room-service',
+    category: 'Өрөөний үйлчилгээ',
+    price: 15000,
+  },
+  {
+    title: 'Ор дэвсгэр солих',
+    icon: 'carbon:bed',
+    category: 'Өрөөний үйлчилгээ',
+    price: 10000,
+  },
 
-export const _service = [...Array(12)].map((_, index) => {
-  const amenities = SERVICE_AMENITIES_OPTIONS.slice(0, 5).map((option) => option.label);
+  // Нэмэлт үйлчилгээ
+  {
+    title: 'Хувцас угаах',
+    icon: 'carbon:wash',
+    category: 'Нэмэлт үйлчилгээ',
+    price: 20000,
+  },
+  {
+    title: 'Хувцас индүүдэх',
+    icon: 'carbon:iron',
+    category: 'Нэмэлт үйлчилгээ',
+    price: 15000,
+  },
+  {
+    title: 'Өрөө үнэртүүлэх',
+    icon: 'carbon:scent',
+    category: 'Нэмэлт үйлчилгээ',
+    price: 5000,
+  },
 
-  const type = (index % 2 && 'apartment') || (index % 4 && 'villa') || 'hotel';
+  // Хоол
+  {
+    title: 'Өрөөнд хоол захиалах',
+    icon: 'carbon:restaurant',
+    category: 'Хоол',
+    price: 45000,
+  },
+  {
+    title: 'Өглөөний цай',
+    icon: 'carbon:cafe',
+    category: 'Хоол',
+    price: 25000,
+  },
+  {
+    title: 'Мини бар',
+    icon: 'carbon:bar',
+    category: 'Хоол',
+    price: 35000,
+  },
 
-  const category = (index % 2 && 'premium') || (index % 4 && 'standard') || 'deluxe';
+  // Энтертайнмент
+  {
+    title: 'Спа массаж',
+    icon: 'carbon:spa',
+    category: 'Энтертайнмент',
+    price: 120000,
+  },
+  {
+    title: 'Фитнесс',
+    icon: 'carbon:gym',
+    category: 'Энтертайнмент',
+    price: 50000,
+  },
+  {
+    title: 'Усан сан',
+    icon: 'carbon:swim',
+    category: 'Энтертайнмент',
+    price: 80000,
+  },
 
-  const company = {
-    name: _mock.companyName(index),
-    logo: _mock.image.company(index),
-    phoneNumber: _mock.phoneNumber(index),
-  };
+  // Такси
+  {
+    title: 'Такси захиалах',
+    icon: 'carbon:taxi',
+    category: 'Такси',
+    price: 30000,
+  },
+  {
+    title: 'Нисэх онгоцны буудал',
+    icon: 'carbon:airport',
+    category: 'Такси',
+    price: 50000,
+  },
+  {
+    title: 'Хот тойрох',
+    icon: 'carbon:car',
+    category: 'Такси',
+    price: 100000,
+  },
 
-  return {
-    id: _mock.id(index),
-    type,
-    category,
-    title: _mock.serviceTitle(index),
-    content: CONTENT,
-    price: _mock.number.price(index),
-    createdAt: new Date(),
-    available: true,
-    favorited: [2, 4].includes(index),
-    location: _mock.address.fullAddress(index),
-    ratings: _mock.number.rating(index),
-    numberOfReviews: _mock.number.nativeL(index),
-    deadline: add(new Date(), { months: index }),
-    amenities,
-    details: {
-      amenities,
-      features: ['Free Wifi', '24/7 Service', 'Cleaning'],
-      includes: ['Breakfast', 'Parking', 'Wifi'],
-    },
-    images: {
-      small: _mock.image.travel(index),
-      medium: _mock.image.travel(index + 1),
-      large: _mock.image.travel(index + 2),
-    },
-    likes: _mock.number.nativeL(index),
-    totalViews: _mock.number.nativeL(index),
-    company,
-  };
-});
+  // Хөтөч
+  {
+    title: 'Хөтөч захиалах',
+    icon: 'carbon:guide',
+    category: 'Хөтөч',
+    price: 150000,
+  },
+  {
+    title: 'Орчуулагч',
+    icon: 'carbon:translate',
+    category: 'Хөтөч',
+    price: 100000,
+  },
+  {
+    title: 'Аялал',
+    icon: 'carbon:map',
+    category: 'Хөтөч',
+    price: 200000,
+  },
+];
 
-export const _servicesByCategories: IHotelCategoryProps[] = [...Array(8)].map((_, index) => ({
+export const _service = HOTEL_SERVICES.map((service, index) => ({
+  id: _mock.id(index),
+  title: service.title,
+  icon: service.icon,
+  category: service.category,
+  content: 'Үйлчилгээний дэлгэрэнгүй тайлбар энд бичигдэнэ...',
+  deadline: '24/7',
+  available: true,
+  favorited: [1, 3].includes(index),
+  likes: _mock.number.nativeL(index),
+  ratings: _mock.number.rating(index),
+  numberOfReviews: _mock.number.nativeL(index),
+  location: _mock.address.fullAddress(index),
+}));
+
+export const _servicesByCategories: IHotelCategoryProps[] = [...Array(6)].map((_, index) => ({
   id: _mock.id(index),
   icon: ICONS[index],
   name:
-    ['Зочид буудал', 'Амралт', 'Виллa', 'Resort', 'Cottage', 'Cabin', 'Camping'][index] || 'Other',
+    ['Өрөөний үйлчилгээ', 'Нэмэлт үйлчилгээ', 'Хоол', 'Энтертайнмент', 'Такси', 'Хөтөч'][index] ||
+    'Other',
+  path: `/service/${_mock.slug(index)}`,
+
   totalService: _mock.number.nativeM(index),
 }));
 

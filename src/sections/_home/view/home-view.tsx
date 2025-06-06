@@ -2,8 +2,10 @@
 
 import { useScroll } from 'framer-motion';
 
-import { _servicesByCategories } from 'src/_mock/_services';
+import { Container } from '@mui/system';
+
 import ScrollProgress from 'src/components/scroll-progress';
+import { _servicesByCategories } from 'src/_mock/_services';
 
 import HomeHero from '../home-hero';
 import HomeLandingHotCategories from '../home-category';
@@ -13,7 +15,7 @@ import HomeLandingHotCategories from '../home-category';
 export default function HomeView() {
   const { scrollYProgress } = useScroll();
   return (
-    <>
+    <Container>
       <ScrollProgress scrollYProgress={scrollYProgress} />
 
       <HomeHero />
@@ -22,17 +24,17 @@ export default function HomeView() {
 
       {/* <HomeFlexibleComponents />
 
-      <HomeFeatureHighlights /> */}
+      <HomeFeatureHighlights />
 
-      {/* <HomeForDesigner />
+      <HomeForDesigner /> */}
 
-      <PricingHome plans={_pricingHome} />  
+      {/* <PricingHome plans={_pricingHome} />
 
       <HomeFAQs />
 
       <HomeCombination />
 
       <HomeAdvertisement /> */}
-    </>
+    </Container>
   );
 }

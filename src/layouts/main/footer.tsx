@@ -4,7 +4,6 @@ import Collapse from '@mui/material/Collapse';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
-import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
 import { usePathname } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -20,16 +19,20 @@ export default function Footer() {
   return (
     <Container
       sx={{
-        width: { xs: '100%', sm: '80%', lg: '40%' }, // Match navbar width
+        width: { xs: '100%', sm: '80%', lg: '40%' },
         mx: 'auto',
         textAlign: 'center',
-        py: { xs: 2, sm: 3 }, // Reduced padding
+        py: { xs: 2, sm: 3 },
         px: { xs: 2, sm: 3 },
+        mb: { xs: 10, sm: 11 },
+        position: 'relative',
+        zIndex: 1200,
+        bgcolor: 'background.paper',
+        borderRadius: 2,
+        boxShadow: (theme) => theme.customShadows.z8,
       }}
     >
       <Stack spacing={2}>
-        <Logo single />
-
         <Stack
           direction="row"
           spacing={2}
@@ -38,12 +41,28 @@ export default function Footer() {
             py: { xs: 1, sm: 2 },
           }}
         >
-          <Link variant="caption" sx={{ color: 'text.secondary' }}>
-            Help Center
+          <Link
+            variant="caption"
+            sx={{
+              color: 'text.secondary',
+              '&:hover': {
+                color: 'text.primary',
+              },
+            }}
+          >
+            Тусламж
           </Link>
 
-          <Link variant="caption" sx={{ color: 'text.secondary' }}>
-            Terms of Service
+          <Link
+            variant="caption"
+            sx={{
+              color: 'text.secondary',
+              '&:hover': {
+                color: 'text.primary',
+              },
+            }}
+          >
+            Үйлчилгээний нөхцөл
           </Link>
         </Stack>
 
@@ -54,7 +73,7 @@ export default function Footer() {
             fontSize: { xs: '0.7rem', sm: '0.75rem' },
           }}
         >
-          © 2023. All rights reserved
+          © 2025. Бүх эрх хуулиар хамгаалагдсан.
         </Typography>
       </Stack>
     </Container>

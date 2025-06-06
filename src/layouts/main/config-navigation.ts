@@ -115,12 +115,12 @@ export const navConfig = [
   },
   {
     title: 'Үйлчилгээ',
-    path: paths.components.root,
+    path: paths.service.root,
     icon: 'carbon:service-desk',
   },
   {
     title: 'Тусламж',
-    path: paths.pages,
+    path: paths.service.help,
     icon: 'carbon:help',
   },
   {

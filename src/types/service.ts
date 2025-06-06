@@ -1,46 +1,22 @@
 export type IHotelServiceProps = {
   id: string;
   title: string;
-  category: string;
-  type: string;
+  icon: string;
   content: string;
-  price: number;
-  favorited: boolean;
-  createdAt: Date | string | number;
+  deadline: string;
   available: boolean;
-  experience: string;
-  location: string;
+  favorited: boolean;
+  likes: number;
   ratings: number;
   numberOfReviews: number;
-  deadline: Date | string | number;
-  icon: string; // Added icon property
-  name: string; // Added name for category display
-  totalService?: number; // Added optional totalJobs for category count
-  details: {
-    amenities: string[];
-    features: string[];
-    includes: string[];
-  };
-  images: {
-    small: string;
-    medium: string;
-    large: string;
-  };
-  likes: number;
-  totalViews: number;
-  skills?: string[];
-  benefits?: string[];
-  company?: {
-    name: string;
-    logo: string;
-    phoneNumber: string;
-  };
+  location: string;
+  category: string; // Add this property
 };
 
-// Add this new type for categories
 export type IHotelCategoryProps = {
   id: string;
-  icon: string;
   name: string;
-  totalService: number;
+  icon: string;
+  path: string; // Add this
+  totalService?: number;
 };

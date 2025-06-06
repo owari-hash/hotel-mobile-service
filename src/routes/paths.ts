@@ -1,6 +1,12 @@
 // ----------------------------------------------------------------------
 
 export const paths = {
+  service: {
+    root: '/service',
+    services: '/service/room-services',
+    help: '/service/help',
+  },
+
   // Marketing
   marketing: {
     root: '/marketing',
