@@ -20,3 +20,16 @@ export type IHotelCategoryProps = {
   path: string; // Add this
   totalService?: number;
 };
+
+export type Service = {
+  id: string;
+  title: string;
+  content: string;
+  category: string;
+  icon: string;
+  price?: number;
+  location?: string;
+  deadline?: string;
+  ratings?: number;
+  numberOfReviews?: number;
+};

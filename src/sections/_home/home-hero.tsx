@@ -11,10 +11,10 @@ import { bgGradient } from 'src/theme/css';
 // ----------------------------------------------------------------------
 
 const _carouselImages = [
-  '/assets/images/travel/travel_1.jpg',
-  '/assets/images/travel/travel_2.jpg',
-  '/assets/images/travel/travel_3.jpg',
-  '/assets/images/travel/travel_4.jpg',
+  '/assets/Carousel/carousel_1.jpg',
+  '/assets/Carousel/carousel_2.jpg',
+  '/assets/Carousel/carousel_3.jpg',
+  '/assets/Carousel/carousel_4.jpg',
 ];
 
 export default function HomeHero() {
