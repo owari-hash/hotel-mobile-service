@@ -12,9 +12,8 @@ import { SettingsDrawer, SettingsProvider } from 'src/components/settings';
 // ----------------------------------------------------------------------
 
 export const metadata = {
-  title: 'Zone UI Kit',
-  description:
-    'The ZONE is built on top of MUI, a powerful library that provides flexible, customizable, and easy-to-use components.',
+  title: 'Зочид буудлын үйлчилгээний систем',
+  description: 'Зочид буудлын бүх төрлийн үйлчилгээг нэг дороос авах боломжтой',
   keywords: 'react,material,kit,application,dashboard,admin,template',
   themeColor: '#000000',
   manifest: '/manifest.json',

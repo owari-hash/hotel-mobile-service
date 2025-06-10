@@ -2,27 +2,6 @@ import { _mock } from './_mock';
 
 // ----------------------------------------------------------------------
 
-const CONTENT = `
-<h5>Үйлчилгээний тайлбар</h5>
-<br/>
-<p>Тухайн өрөөний тайлбар, онцлог, давуу тал, үйлчилгээний нөхцөл гэх мэт мэдээллийг энд бичнэ.</p>
-
-<br/>
-<br/>
-
-<h5>Үндсэн үйлчилгээнүүд</h5>
-<br/>
-<ul>
-  <li>Өрөөний цэвэрлэгээ</li>
-  <li>24/7 үйлчилгээ</li>
-  <li>Wifi</li>
-  <li>Зочны үйлчилгээ</li>
-  <li>Ариун цэврийн өрөө</li>
-  <li>Кондишн</li>
-  <li>Зочны өрөө</li>
-</ul>
-`;
-
 export const SERVICE_AMENITIES_OPTIONS = [
   { value: 'Wifi', label: 'Wifi' },
   { value: 'Кондишн', label: 'Кондишн' },
@@ -36,17 +15,15 @@ export const SERVICE_AMENITIES_OPTIONS = [
   { value: 'Сауна', label: 'Сауна' },
 ];
 
-const ICONS = [
-  '/assets/icons/services/service-bell.svg',
-  '/assets/icons/services/service-extra.svg',
-  '/assets/icons/services/service-food.svg',
-  '/assets/icons/services/service-entertainment.svg',
-  '/assets/icons/services/service-taxi.svg',
-  '/assets/icons/services/service-guide.svg',
-];
-
 const HOTEL_SERVICES = [
   // Өрөөний үйлчилгээ
+  {
+    id: '0',
+    title: 'Менежертэй холбогдох',
+    icon: 'carbon:phone',
+    category: 'Өрөөний үйлчилгээ',
+    content: `Менежертэй холбогдох үйлчилгээ нь таны санал, хүсэлт, асуудлыг шуурхай шийдвэрлэхэд тусална.`,
+  },
   {
     id: '1',
     title: 'Өрөө цэвэрлэх',
@@ -54,13 +31,13 @@ const HOTEL_SERVICES = [
     category: 'Өрөөний үйлчилгээ',
     price: 12000,
     content: `
-      <h5>Өрөө цэвэрлэх үйлчилгээ</h5>
-      <p>Таны өрөөг өдөр бүр стандартын дагуу цэвэрлэж, тав тухтай орчинг бүрдүүлнэ.</p>
-      <ul>
-        <li>Бүтэн өрөөний тоос соруулах</li>
-        <li>Ариун цэврийн өрөө цэвэрлэх</li>
-        <li>Тавилга арчих</li>
-      </ul>
+      Өрөө цэвэрлэх үйлчилгээ
+      Таны өрөөг өдөр бүр стандартын дагуу цэвэрлэж, тав тухтай орчинг бүрдүүлнэ.
+
+      Бүтэн өрөөний тоос соруулах
+      Ариун цэврийн өрөө цэвэрлэх
+      Тавилга арчих
+
     `,
   },
   {
@@ -384,14 +361,14 @@ export const _servicesByCategories = [
   {
     id: '1',
     name: 'Өрөөний үйлчилгээ',
-    icon: 'carbon:clean',
-    path: '/services/clean',
+    icon: '/assets/icons/services/service-bell.svg',
+    path: '/services',
   },
   {
     id: '2',
     name: 'Нэмэлт үйлчилгээ',
-    icon: 'carbon:add',
-    path: '/services/extra',
+    icon: '/assets/icons/services/service-extra.svg',
+    path: '/services',
   },
   {
     id: '3',
