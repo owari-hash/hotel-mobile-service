@@ -4,11 +4,11 @@ import { useState, useEffect, useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
 
-import { _faqsSupport } from 'src/_mock';
 import Iconify from 'src/components/iconify';
+import { _faqsSupport } from 'src/_mock/_others';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import SupportNav from '../support-nav';

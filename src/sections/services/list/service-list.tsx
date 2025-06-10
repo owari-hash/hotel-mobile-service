@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import React, { useRef, useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
@@ -25,7 +24,6 @@ const Transition = React.forwardRef(
 
 export default function ServiceList() {
   const theme = useTheme();
-  const router = useRouter();
   const [activeCategory, setActiveCategory] = useState<string>('');
   const categoryRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const categoryBarRef = useRef<HTMLDivElement>(null);
@@ -102,7 +100,7 @@ export default function ServiceList() {
           top: 0,
           zIndex: 10,
           bgcolor: 'background.paper',
-          borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+          borderBottom: () => `1px solid ${theme.palette.divider}`,
         }}
       >
         <Stack
@@ -152,19 +150,20 @@ export default function ServiceList() {
         {_servicesByCategories.map((category) => (
           <Box
             key={category.id}
-            ref={(el) => (categoryRefs.current[category.id] = el)}
+            ref={(el) => {
+              categoryRefs.current[category.id] = el as HTMLDivElement | null;
+            }}
             sx={{
               scrollMarginTop: { xs: 60, sm: 80 },
               minHeight: { xs: '50vh', sm: 'auto' },
             }}
           >
-            {/* Category Header */}
             <Typography
               variant="h6"
               sx={{
                 mb: 3,
                 pb: 1,
-                borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+                borderBottom: () => `1px solid ${theme.palette.divider}`,
               }}
             >
               {category.name}
