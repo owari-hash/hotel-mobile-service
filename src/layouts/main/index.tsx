@@ -16,6 +16,8 @@ const pathsOnDark = ['/career', '/career/', '/travel', '/travel/'];
 const spacingLayout = [
   ...pathsOnDark,
   '/',
+  '/service', // Re-add service to spacingLayout if it was removed, as it needs to be excluded from spacing
+  '/help', // Add the new help page to exclude it from spacing
   '/e-learning',
   '/e-learning/',
   '/marketing',

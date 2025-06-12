@@ -32,7 +32,7 @@ export const navConfig = [
   },
   {
     title: 'Тусламж',
-    path: paths.service.help,
+    path: paths.help,
     icon: 'carbon:help',
   },
   {

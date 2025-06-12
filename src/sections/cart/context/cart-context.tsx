@@ -1,6 +1,14 @@
 'use client';
 
-import { useState, useEffect, ReactNode, useContext, createContext } from 'react';
+import {
+  useMemo,
+  useState,
+  ReactNode,
+  useEffect,
+  useContext,
+  useCallback,
+  createContext,
+} from 'react';
 
 import { Service } from 'src/types/service';
 
@@ -56,7 +64,7 @@ export function CartProvider({ children }: CartProviderProps) {
     }
   }, [items]);
 
-  const addItem = (service: Service) => {
+  const addItem = useCallback((service: Service) => {
     setItems((prevItems) => {
       const existingItemIndex = prevItems.findIndex((item) => item.id === service.id);
 
@@ -71,43 +79,46 @@ export function CartProvider({ children }: CartProviderProps) {
 
       return [...prevItems, { ...service, quantity: 1 }];
     });
-  };
+  }, []);
 
-  const removeItem = (id: string) => {
+  const removeItem = useCallback((id: string) => {
     setItems((prevItems) => prevItems.filter((item) => item.id !== id));
-  };
+  }, []);
 
-  const updateQuantity = (id: string, quantity: number) => {
-    if (quantity <= 0) {
-      removeItem(id);
-      return;
-    }
+  const updateQuantity = useCallback(
+    (id: string, quantity: number) => {
+      if (quantity <= 0) {
+        removeItem(id);
+        return;
+      }
 
-    setItems((prevItems) =>
-      prevItems.map((item) => (item.id === id ? { ...item, quantity } : item))
-    );
-  };
+      setItems((prevItems) =>
+        prevItems.map((item) => (item.id === id ? { ...item, quantity } : item))
+      );
+    },
+    [removeItem]
+  ); // removeItem is a dependency because it's called inside updateQuantity
 
-  const clearCart = () => {
+  const clearCart = useCallback(() => {
     setItems([]);
-  };
+  }, []);
 
   const itemCount = items.reduce((count, item) => count + item.quantity, 0);
 
   const totalAmount = items.reduce((total, item) => total + (item.price || 0) * item.quantity, 0);
 
-  // const contextValue = useMemo(
-  //   () => ({
-  //     items,
-  //     addItem,
-  //     removeItem,
-  //     updateQuantity,
-  //     clearCart,
-  //     itemCount,
-  //     totalAmount,
-  //   })
-  // [items, itemCount, totalAmount]
-  // );
+  const contextValue = useMemo(
+    () => ({
+      items,
+      addItem,
+      removeItem,
+      updateQuantity,
+      clearCart,
+      itemCount,
+      totalAmount,
+    }),
+    [items, addItem, removeItem, updateQuantity, clearCart, itemCount, totalAmount]
+  );
 
-  // return <CartContext.Provider value={contextValue}>{children}</CartContext.Provider>;
+  return <CartContext.Provider value={contextValue}>{children}</CartContext.Provider>;
 }
