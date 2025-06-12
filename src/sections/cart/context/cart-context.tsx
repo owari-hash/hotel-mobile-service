@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState, useEffect, ReactNode, useContext, createContext } from 'react';
+import { useState, useEffect, ReactNode, useContext, createContext } from 'react';
 
 import { Service } from 'src/types/service';
 
@@ -96,18 +96,18 @@ export function CartProvider({ children }: CartProviderProps) {
 
   const totalAmount = items.reduce((total, item) => total + (item.price || 0) * item.quantity, 0);
 
-  const contextValue = useMemo(
-    () => ({
-      items,
-      addItem,
-      removeItem,
-      updateQuantity,
-      clearCart,
-      itemCount,
-      totalAmount,
-    }),
-    [items, itemCount, totalAmount]
-  );
+  // const contextValue = useMemo(
+  //   () => ({
+  //     items,
+  //     addItem,
+  //     removeItem,
+  //     updateQuantity,
+  //     clearCart,
+  //     itemCount,
+  //     totalAmount,
+  //   })
+  // [items, itemCount, totalAmount]
+  // );
 
-  return <CartContext.Provider value={contextValue}>{children}</CartContext.Provider>;
+  // return <CartContext.Provider value={contextValue}>{children}</CartContext.Provider>;
 }
