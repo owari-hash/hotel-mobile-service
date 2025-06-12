@@ -10,14 +10,14 @@ export type IHotelServiceProps = {
   ratings: number;
   numberOfReviews: number;
   location: string;
-  category: string; // Add this property
+  category: string;
 };
 
 export type IHotelCategoryProps = {
   id: string;
   name: string;
   icon: string;
-  path: string; // Add this
+  path: string;
   totalService?: number;
 };
 

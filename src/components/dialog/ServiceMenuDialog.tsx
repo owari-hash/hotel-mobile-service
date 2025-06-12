@@ -18,6 +18,8 @@ import {
   ListItemButton,
 } from '@mui/material';
 
+import { useCart } from 'src/sections/cart/context/cart-context';
+
 import Iconify from '../iconify/iconify';
 import { Service } from '../../types/service';
 import { RouterLink } from '../../routes/components';
@@ -72,8 +74,9 @@ type Props = {
   open: boolean;
   onClose: () => void;
   services?: Service[];
-  onSelect: (service: Service) => void;
+  onSelect?: (service: Service) => void; // Made optional as it might not be directly used for adding to cart
   onSelectCategory?: (category: { id: string; name: string; path: string }) => void;
+  selectedService?: Service | null; // Add a prop for the currently selected service to add to cart
 };
 
 export default function ServiceMenuDialog({
@@ -82,7 +85,16 @@ export default function ServiceMenuDialog({
   services,
   onSelect,
   onSelectCategory = () => {},
+  selectedService = null, // Default to null
 }: Props) {
+  const { addItem } = useCart();
+
+  const handleAddToCart = () => {
+    if (selectedService) {
+      addItem(selectedService);
+      onClose(); // Close the dialog after adding to cart
+    }
+  };
   return (
     <Dialog
       open={open}
@@ -138,10 +150,20 @@ export default function ServiceMenuDialog({
         </List>
       </DialogContent>
 
-      <Box p={2}>
+      <Box p={2} display="flex" gap={2}>
         <Button fullWidth variant="outlined" onClick={onClose}>
           Хаах
         </Button>
+        {selectedService && (
+          <Button
+            fullWidth
+            variant="contained"
+            onClick={handleAddToCart}
+            startIcon={<Iconify icon="carbon:shopping-cart" />}
+          >
+            Сагсанд нэмэх
+          </Button>
+        )}
       </Box>
     </Dialog>
   );

@@ -3,10 +3,11 @@ import 'src/global.css';
 // ----------------------------------------------------------------------
 
 import ThemeProvider from 'src/theme';
-import { LocalizationProvider } from 'src/locales';
 import { primaryFont } from 'src/theme/typography';
+import { LocalizationProvider } from 'src/locales';
 import ProgressBar from 'src/components/progress-bar';
 import MotionLazy from 'src/components/animate/motion-lazy';
+import { CartProvider } from 'src/sections/cart/context/cart-context';
 import { SettingsDrawer, SettingsProvider } from 'src/components/settings';
 
 // ----------------------------------------------------------------------
@@ -61,7 +62,7 @@ export default function RootLayout({ children }: Props) {
             <ThemeProvider>
               <MotionLazy>
                 <ProgressBar />
-                {children}
+                <CartProvider>{children}</CartProvider>
                 <SettingsDrawer />
               </MotionLazy>
             </ThemeProvider>

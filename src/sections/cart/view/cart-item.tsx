@@ -33,8 +33,10 @@ export default function CartItem({ item, onRemove, onQuantityChange }: CartItemP
             <Iconify icon={item.icon} width={24} />
           </Box>
 
-          <Box sx={{ flexGrow: 1 }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+          <Box sx={{ flexGrow: 1, minWidth: 0 }}>
+            {' '}
+            {/* Add minWidth: 0 to allow content to shrink */}
+            <Typography variant="subtitle1" sx={{ fontWeight: 600 }} noWrap>
               {item.title}
             </Typography>
             <Typography variant="body2" color="text.secondary" noWrap>
@@ -42,7 +44,12 @@ export default function CartItem({ item, onRemove, onQuantityChange }: CartItemP
             </Typography>
           </Box>
 
-          <IconButton onClick={() => onRemove(item.id)} sx={{ color: 'text.secondary' }}>
+          <IconButton
+            onClick={() => onRemove(item.id)}
+            sx={{ color: 'text.secondary', flexShrink: 0 }}
+          >
+            {' '}
+            {/* Ensure button doesn't shrink */}
             <Iconify icon="eva:trash-2-outline" width={20} />
           </IconButton>
         </Stack>

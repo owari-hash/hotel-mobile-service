@@ -20,6 +20,12 @@ export default function HomeView() {
       <HomeHero />
 
       <HomeLandingHotCategories categories={_servicesByCategories} />
+      {/*
+      <HomeStats />
+
+      <HomeFeatured />
+
+      <HomeTestimonials /> */}
     </MobileContainer>
   );
 }

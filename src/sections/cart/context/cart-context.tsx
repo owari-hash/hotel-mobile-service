@@ -4,10 +4,8 @@ import { useMemo, useState, useEffect, ReactNode, useContext, createContext } fr
 
 import { Service } from 'src/types/service';
 
-// Define the cart item type
 export type CartItem = Service & { quantity: number };
 
-// Define the cart context type
 type CartContextType = {
   items: CartItem[];
   addItem: (service: Service) => void;
@@ -18,7 +16,6 @@ type CartContextType = {
   totalAmount: number;
 };
 
-// Create the cart context with default values
 const CartContext = createContext<CartContextType>({
   items: [],
   addItem: () => {},
@@ -29,7 +26,6 @@ const CartContext = createContext<CartContextType>({
   totalAmount: 0,
 });
 
-// Custom hook to use the cart context
 export const useCart = () => useContext(CartContext);
 
 type CartProviderProps = {
@@ -37,38 +33,34 @@ type CartProviderProps = {
 };
 
 export function CartProvider({ children }: CartProviderProps) {
-  // Initialize cart items from localStorage if available
-  const [items, setItems] = useState<CartItem[]>([]);
-
-  // Load cart items from localStorage on component mount
-  useEffect(() => {
-    try {
-      const savedCart = localStorage.getItem('cart');
-      if (savedCart) {
-        setItems(JSON.parse(savedCart));
+  const [items, setItems] = useState<CartItem[]>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const savedCart = localStorage.getItem('cart');
+        return savedCart ? JSON.parse(savedCart) : [];
+      } catch (error) {
+        console.error('Failed to load cart:', error);
+        return [];
       }
-    } catch (error) {
-      console.error('Failed to load cart from localStorage:', error);
     }
-  }, []);
+    return [];
+  });
 
-  // Save cart items to localStorage whenever they change
   useEffect(() => {
-    try {
-      localStorage.setItem('cart', JSON.stringify(items));
-    } catch (error) {
-      console.error('Failed to save cart to localStorage:', error);
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('cart', JSON.stringify(items));
+      } catch (error) {
+        console.error('Failed to save cart:', error);
+      }
     }
   }, [items]);
 
-  // Add an item to the cart
   const addItem = (service: Service) => {
     setItems((prevItems) => {
-      // Check if the item already exists in the cart
       const existingItemIndex = prevItems.findIndex((item) => item.id === service.id);
 
       if (existingItemIndex !== -1) {
-        // If the item exists, increase its quantity
         const updatedItems = [...prevItems];
         updatedItems[existingItemIndex] = {
           ...updatedItems[existingItemIndex],
@@ -85,16 +77,16 @@ export function CartProvider({ children }: CartProviderProps) {
     setItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
-  // const updateQuantity = (id: string, quantity: number) => {
-  //   if (quantity <= 0) {
-  //     removeItem(id);
-  //     return;
-  //   }
+  const updateQuantity = (id: string, quantity: number) => {
+    if (quantity <= 0) {
+      removeItem(id);
+      return;
+    }
 
-  //   setItems((prevItems) =>
-  //     prevItems.map((item) => (item.id === id ? { ...item, quantity } : item))
-  //   );
-  // };
+    setItems((prevItems) =>
+      prevItems.map((item) => (item.id === id ? { ...item, quantity } : item))
+    );
+  };
 
   const clearCart = () => {
     setItems([]);
@@ -104,19 +96,18 @@ export function CartProvider({ children }: CartProviderProps) {
 
   const totalAmount = items.reduce((total, item) => total + (item.price || 0) * item.quantity, 0);
 
-  // Memoize the context value to prevent unnecessary re-renders
   const contextValue = useMemo(
     () => ({
       items,
       addItem,
       removeItem,
-      // updateQuantity, // Ensure it's included here
+      updateQuantity,
       clearCart,
       itemCount,
       totalAmount,
     }),
-    [items, itemCount, totalAmount] // Include updateQuantity in dependencies
+    [items, itemCount, totalAmount]
   );
 
-  // return <CartContext.Provider value={contextValue}>{children}</CartContext.Provider>;
+  return <CartContext.Provider value={contextValue}>{children}</CartContext.Provider>;
 }

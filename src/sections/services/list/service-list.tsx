@@ -61,7 +61,7 @@ export default function ServiceList() {
 
       scrollContainer.scrollTo({
         left: scrollPosition,
-        behavior: 'smooth',
+        behavior: 'auto',
       });
     }
   };
@@ -175,7 +175,7 @@ export default function ServiceList() {
                 variant={activeCategory === category.id ? 'filled' : 'outlined'}
                 color={activeCategory === category.id ? 'primary' : 'default'}
                 onClick={() => {
-                  categoryRefs.current[category.id]?.scrollIntoView({ behavior: 'smooth' });
+                  categoryRefs.current[category.id]?.scrollIntoView({ behavior: 'auto' });
                   setActiveCategory(category.id);
                 }}
                 icon={
@@ -289,7 +289,7 @@ export default function ServiceList() {
                                 setOpenDialog(true);
                               }}
                               sx={{
-                                width: { xs: '40%', sm: 'auto' }, // Full width on mobile
+                                width: { xs: '40%', sm: 'auto' },
                                 py: 1.5,
                                 fontWeight: 600,
                               }}

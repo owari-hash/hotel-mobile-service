@@ -13,9 +13,11 @@ import ServiceHero from '../list/service-hero';
 export default function ServiceView() {
   const { scrollYProgress } = useScroll();
   return (
-    <MobileContainer variant="mobile" disableGutters sx={{ mt: 0 }}>
+    <MobileContainer variant="mobile" disableGutters sx={{ mt: 0, pt: 0 }}>
       <ScrollProgress scrollYProgress={scrollYProgress} />
+
       <ServiceHero />
+
       <ServiceList />
     </MobileContainer>
   );

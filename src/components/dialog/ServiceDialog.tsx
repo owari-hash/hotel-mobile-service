@@ -40,8 +40,9 @@ export default function ServiceDialog({ open, onClose, service }: ServiceDialogP
   const addToCart = () => {
     addItem(service);
     setSnackbarOpen(true);
-    // Optional: close the dialog after adding to cart
-    // onClose();
+    setTimeout(() => {
+      onClose();
+    }, 500); // Close after 500ms to allow snackbar to be seen
   };
 
   const handleSnackbarClose = () => {
@@ -66,6 +67,18 @@ export default function ServiceDialog({ open, onClose, service }: ServiceDialogP
         },
       }}
     >
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        sx={{ mt: 8 }}
+      >
+        <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
+          {service.title} сагсанд нэмэгдлээ
+        </Alert>
+      </Snackbar>
+
       <DialogTitle sx={{ pb: 1 }}>
         <Typography variant="h6" component="div">
           {service.title}
@@ -136,17 +149,6 @@ export default function ServiceDialog({ open, onClose, service }: ServiceDialogP
           </Button>
         </Stack>
       </DialogContent>
-
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      >
-        <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
-          {service.title} сагсанд нэмэгдлээ
-        </Alert>
-      </Snackbar>
     </Dialog>
   );
 }
