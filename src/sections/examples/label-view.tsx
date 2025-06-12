@@ -33,7 +33,6 @@ export default function LabelView() {
             links={[
               {
                 name: 'Components',
-                href: paths.components.root,
               },
               { name: 'Label' },
             ]}

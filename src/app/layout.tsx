@@ -3,8 +3,8 @@ import 'src/global.css';
 // ----------------------------------------------------------------------
 
 import ThemeProvider from 'src/theme';
-import { primaryFont } from 'src/theme/typography';
 import { LocalizationProvider } from 'src/locales';
+import { primaryFont } from 'src/theme/typography';
 import ProgressBar from 'src/components/progress-bar';
 import MotionLazy from 'src/components/animate/motion-lazy';
 import { SettingsDrawer, SettingsProvider } from 'src/components/settings';
@@ -61,8 +61,8 @@ export default function RootLayout({ children }: Props) {
             <ThemeProvider>
               <MotionLazy>
                 <ProgressBar />
-                <SettingsDrawer />
                 {children}
+                <SettingsDrawer />
               </MotionLazy>
             </ThemeProvider>
           </SettingsProvider>

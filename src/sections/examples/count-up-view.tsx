@@ -5,7 +5,6 @@ import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
-import { paths } from 'src/routes/paths';
 import CountUp from 'src/components/count-up';
 import { fShortenNumber } from 'src/utils/format-number';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -36,7 +35,6 @@ export default function CountUpPageView() {
             links={[
               {
                 name: 'Components',
-                href: paths.components.root,
               },
               { name: 'CountUp' },
             ]}

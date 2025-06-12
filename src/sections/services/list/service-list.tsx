@@ -4,6 +4,7 @@ import router from 'next/router';
 import React, { useRef, useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
+import { Chip } from '@mui/material';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -167,15 +168,17 @@ export default function ServiceList() {
             }}
           >
             {_servicesByCategories.map((category) => (
-              <Button
+              <Chip
                 id={`category-${category.id}`}
                 key={category.id}
-                variant={activeCategory === category.id ? 'contained' : 'outlined'}
+                label={category.name}
+                variant={activeCategory === category.id ? 'filled' : 'outlined'}
+                color={activeCategory === category.id ? 'primary' : 'default'}
                 onClick={() => {
                   categoryRefs.current[category.id]?.scrollIntoView({ behavior: 'smooth' });
                   setActiveCategory(category.id);
                 }}
-                startIcon={
+                icon={
                   <Iconify
                     icon={category.icon}
                     width={20}
@@ -185,14 +188,15 @@ export default function ServiceList() {
                   />
                 }
                 sx={{
-                  px: 2,
-                  py: 1,
+                  px: 1,
+                  height: 36,
                   minWidth: 'max-content',
-                  whiteSpace: 'nowrap',
+                  '& .MuiChip-label': {
+                    px: 0.5,
+                    fontWeight: 500,
+                  },
                 }}
-              >
-                {category.name}
-              </Button>
+              />
             ))}
           </Stack>
         </Box>
@@ -276,9 +280,8 @@ export default function ServiceList() {
                             />
                           </Stack>
 
-                          <Stack direction="row" spacing={2}>
+                          <Stack direction="row" justifyContent="flex-end">
                             <Button
-                              fullWidth
                               variant="contained"
                               startIcon={<Iconify icon="carbon:calendar" />}
                               onClick={() => {
@@ -286,6 +289,7 @@ export default function ServiceList() {
                                 setOpenDialog(true);
                               }}
                               sx={{
+                                width: { xs: '40%', sm: 'auto' }, // Full width on mobile
                                 py: 1.5,
                                 fontWeight: 600,
                               }}

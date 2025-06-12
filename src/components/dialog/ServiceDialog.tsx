@@ -1,13 +1,15 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 
 import Box from '@mui/material/Box';
+import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import Slide from '@mui/material/Slide';
 import Dialog from '@mui/material/Dialog';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
+import Snackbar from '@mui/material/Snackbar';
 import Typography from '@mui/material/Typography';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -15,6 +17,7 @@ import { TransitionProps } from '@mui/material/transitions';
 
 import Iconify from '../iconify';
 import { Service } from '../../types/service';
+import { useCart } from '../../sections/cart/context/cart-context';
 
 const Transition = React.forwardRef(
   (props: TransitionProps & { children: React.ReactElement }, ref: React.Ref<unknown>) => (
@@ -29,7 +32,21 @@ type ServiceDialogProps = {
 };
 
 export default function ServiceDialog({ open, onClose, service }: ServiceDialogProps) {
+  const { addItem } = useCart();
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+
   if (!service) return null;
+
+  const addToCart = () => {
+    addItem(service);
+    setSnackbarOpen(true);
+    // Optional: close the dialog after adding to cart
+    // onClose();
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
 
   return (
     <Dialog
@@ -112,13 +129,24 @@ export default function ServiceDialog({ open, onClose, service }: ServiceDialogP
             color="primary"
             startIcon={<Iconify icon="mdi:cart" />}
             onClick={() => {
-              // Add to cart logic
+              addToCart();
             }}
           >
             Сагс
           </Button>
         </Stack>
       </DialogContent>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
+          {service.title} сагсанд нэмэгдлээ
+        </Alert>
+      </Snackbar>
     </Dialog>
   );
 }

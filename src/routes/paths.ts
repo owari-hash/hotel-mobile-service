@@ -7,6 +7,8 @@ export const paths = {
     help: '/service/help',
   },
 
+  cart: '/cart',
+
   maintenance: '/maintenance',
   comingsoon: '/coming-soon',
   pricing01: '/pricing-01',

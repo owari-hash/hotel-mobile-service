@@ -126,7 +126,6 @@ export default function NavigationBarView() {
             links={[
               {
                 name: 'Components',
-                href: paths.components.root,
               },
               { name: 'Navigation Bar' },
             ]}

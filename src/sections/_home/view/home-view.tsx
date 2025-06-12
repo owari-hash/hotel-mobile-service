@@ -2,8 +2,8 @@
 
 import { useScroll } from 'framer-motion';
 
-import ScrollProgress from 'src/components/scroll-progress';
 import { _servicesByCategories } from 'src/_mock/_services';
+import ScrollProgress from 'src/components/scroll-progress';
 import MobileContainer from 'src/components/shared/mobile-container';
 
 import HomeHero from '../home-hero';
@@ -20,20 +20,6 @@ export default function HomeView() {
       <HomeHero />
 
       <HomeLandingHotCategories categories={_servicesByCategories} />
-
-      {/* <HomeFlexibleComponents />
-
-      <HomeFeatureHighlights />
-
-      <HomeForDesigner /> */}
-
-      {/* <PricingHome plans={_pricingHome} />
-
-      <HomeFAQs />
-
-      <HomeCombination />
-
-      <HomeAdvertisement /> */}
     </MobileContainer>
   );
 }

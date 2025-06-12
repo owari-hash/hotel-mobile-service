@@ -84,7 +84,6 @@ export default function LightboxView() {
             links={[
               {
                 name: 'Components',
-                href: paths.components.root,
               },
               { name: 'Lightbox' },
             ]}

@@ -8,7 +8,6 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-import { paths } from 'src/routes/paths';
 import { useBoolean } from 'src/hooks/use-boolean';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
@@ -33,7 +32,6 @@ export default function FormValidationView() {
             links={[
               {
                 name: 'Components',
-                href: paths.components.root,
               },
               { name: 'Form Validation' },
             ]}

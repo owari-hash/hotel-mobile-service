@@ -7,7 +7,6 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Container from '@mui/material/Container';
 
-import { paths } from 'src/routes/paths';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import Inview from './inview';
@@ -49,7 +48,6 @@ export default function AnimateView() {
             links={[
               {
                 name: 'Components',
-                href: paths.components.root,
               },
               { name: 'Animate' },
             ]}

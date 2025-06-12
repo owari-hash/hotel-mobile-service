@@ -8,7 +8,6 @@ import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 
 import { _mock } from 'src/_mock';
-import { paths } from 'src/routes/paths';
 import Image from 'src/components/image';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
@@ -36,7 +35,6 @@ export default function ImageView() {
             links={[
               {
                 name: 'Components',
-                href: paths.components.root,
               },
               { name: 'Image' },
             ]}

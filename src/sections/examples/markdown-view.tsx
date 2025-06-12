@@ -97,7 +97,6 @@ export default function MarkdownView() {
             links={[
               {
                 name: 'Components',
-                href: paths.components.root,
               },
               { name: 'Markdown' },
             ]}

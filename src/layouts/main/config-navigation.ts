@@ -43,8 +43,7 @@ export const navConfig = [
   },
   {
     title: 'Сагс',
-    path: paths.service.help,
-
+    path: paths.cart,
     icon: 'carbon:shopping-cart',
   },
 ];

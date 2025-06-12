@@ -27,7 +27,6 @@ export default function ScrollView() {
             links={[
               {
                 name: 'Components',
-                href: paths.components.root,
               },
               { name: 'Scrollbar' },
             ]}
