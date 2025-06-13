@@ -1,6 +1,6 @@
 'use client';
 
-import router from 'next/router';
+import { useRouter } from 'next/navigation';
 import React, { useRef, useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
@@ -18,6 +18,7 @@ import { _service, _servicesByCategories } from 'src/_mock/_services';
 
 export default function ServiceList() {
   const theme = useTheme();
+  const router = useRouter();
   const [activeCategory, setActiveCategory] = useState<string>('');
   const [language, setLanguage] = useState<string>('mn'); // 'mn' for Mongolian, 'en' for English
   const categoryRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
@@ -270,7 +271,7 @@ export default function ServiceList() {
                                   lineHeight: 1.5,
                                 }}
                               >
-                                {service.content}
+                                {service.content || ''}
                               </Typography>
                             </Box>
 

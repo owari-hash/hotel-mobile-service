@@ -23,7 +23,18 @@ export const SERVICE_AMENITIES_OPTIONS = [
   { value: 'Сауна', label: 'Сауна' },
 ];
 
-const ALL_SERVICES = [
+interface BaseService {
+  id: string;
+  title: string;
+  icon: string;
+  category: string;
+  price: number;
+  content?: string;
+  subcategory?: string;
+  mealType?: string;
+}
+
+const ALL_SERVICES: BaseService[] = [
   ...ROOM_SERVICES,
   ...EXTRA_SERVICES,
   ...FOOD_SERVICES,
@@ -40,7 +51,7 @@ export const _service = ALL_SERVICES.map((service, index) => {
     category: service.category,
     subcategory: service.subcategory,
     price: service.price,
-    content: service.content,
+    content: service.content || '',
     deadline: '24/7',
     available: true,
     favorited: [1, 3].includes(index),
@@ -50,11 +61,10 @@ export const _service = ALL_SERVICES.map((service, index) => {
     location: _mock.address.fullAddress(index),
   };
 
-  // Add mealType specifically for food services if it exists
   if (service.category === 'Хоол' && 'mealType' in service) {
     return {
       ...commonProps,
-      mealType: (service as any).mealType, // Cast to any to access mealType
+      mealType: service.mealType,
     };
   }
 

@@ -21,6 +21,13 @@ import ServiceDialog from 'src/components/dialog/ServiceDialog';
 import ServiceCard from 'src/components/service-card/service-card';
 import { ENTERTAINMENT_SERVICES } from 'src/_mock/_entertainment-services';
 
+type CategoryColor = 'success' | 'info' | 'warning' | 'default' | 'primary';
+type CategoryChip = {
+  label: string;
+  icon: string;
+  color: CategoryColor;
+};
+
 const CATEGORY_INFO = {
   'Өрөөний үйлчилгээ': {
     icon: 'mdi:room-service',
@@ -36,8 +43,23 @@ const CATEGORY_INFO = {
       { label: 'Хүргэлттэй', icon: 'ic:round-delivery-dining', color: 'info' },
     ],
   },
-  // Add other categories...
-};
+  'Нэмэлт үйлчилгээ': {
+    icon: 'ic:round-more-horiz',
+    chips: [{ label: 'Тухай бүр', icon: 'ic:round-schedule', color: 'default' }],
+  },
+  Энтертайнмент: {
+    icon: 'ic:round-sports-esports',
+    chips: [{ label: 'Өдөр бүр', icon: 'ic:round-event', color: 'success' }],
+  },
+  Такси: {
+    icon: 'ic:round-local-taxi',
+    chips: [{ label: '24/7', icon: 'ic:round-access-time', color: 'success' }],
+  },
+  Хөтөч: {
+    icon: 'ic:round-tour',
+    chips: [{ label: 'Урьдчилан', icon: 'ic:round-event-available', color: 'info' }],
+  },
+} satisfies Record<string, { icon: string; chips: CategoryChip[] }>;
 
 interface ServiceListTemplateProps {
   categoryName: string;
@@ -123,6 +145,10 @@ export default function ServiceListTemplate({ categoryName }: ServiceListTemplat
     setLanguage((prev) => (prev === 'mn' ? 'en' : 'mn'));
   };
 
+  // Simplified category finding
+  const currentCategory = _servicesByCategories.find((cat) => cat.name === categoryName);
+  const currentServices = getServicesByCategory(categoryName);
+
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
       <Stack spacing={3}>
@@ -199,88 +225,61 @@ export default function ServiceListTemplate({ categoryName }: ServiceListTemplat
               overflowX: 'auto',
               '&::-webkit-scrollbar': { display: 'none' },
               scrollbarWidth: 'none',
-              scrollBehavior: 'smooth',
             }}
           >
-            {_servicesByCategories
-              .filter((category) => category.name === categoryName)
-              .map((category) => (
-                <Stack direction="row" alignItems="center" spacing={1} key={category.id}>
-                  <Chip
-                    id={`category-${category.id}`}
-                    label={category.name}
-                    variant={activeCategory === category.id ? 'filled' : 'outlined'}
-                    color={activeCategory === category.id ? 'primary' : 'default'}
-                    onClick={() => {
-                      categoryRefs.current[category.id]?.scrollIntoView({ behavior: 'auto' });
-                      setActiveCategory(category.id);
-                    }}
-                    icon={
-                      <Iconify
-                        icon={category.icon}
-                        width={20}
-                        sx={{
-                          color: activeCategory === category.id ? 'common.white' : 'primary.main',
-                        }}
-                      />
-                    }
-                    sx={{
-                      px: 1,
-                      height: 36,
-                      minWidth: 'max-content',
-                      '& .MuiChip-label': {
-                        px: 0.5,
-                        fontWeight: 500,
-                      },
-                    }}
-                  />
-
-                  {CATEGORY_INFO[category.name]?.chips.map((chip, index) => (
-                    <Chip
-                      key={index}
-                      label={chip.label}
-                      variant="outlined"
-                      color={chip.color}
-                      icon={<Iconify icon={chip.icon} width={18} />}
-                      sx={{
-                        px: 1,
-                        height: 36,
-                        borderRadius: 2, // rounded corners like category chip
-                        minWidth: 'max-content',
-                        '& .MuiChip-label': {
-                          px: 0.5,
-                          fontWeight: 500,
-                          fontSize: 14,
-                        },
-                        '& .MuiChip-icon': {
-                          marginLeft: '4px',
-                        },
-                      }}
+            {currentCategory && (
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <Chip
+                  id={`category-${currentCategory.id}`}
+                  label={currentCategory.name}
+                  variant="filled"
+                  color="primary"
+                  icon={
+                    <Iconify
+                      icon={currentCategory.icon}
+                      width={20}
+                      sx={{ color: 'common.white' }}
                     />
-                  ))}
-                </Stack>
-              ))}
+                  }
+                />
+
+                {CATEGORY_INFO[categoryName as keyof typeof CATEGORY_INFO] &&
+                  CATEGORY_INFO[categoryName as keyof typeof CATEGORY_INFO].chips.map(
+                    (chip: CategoryChip, index: number) => (
+                      <Chip
+                        key={index}
+                        label={chip.label}
+                        variant="outlined"
+                        color={chip.color}
+                        icon={<Iconify icon={chip.icon} width={18} />}
+                      />
+                    )
+                  )}
+
+                <Chip
+                  size="small"
+                  color="primary"
+                  variant="outlined"
+                  label={`${currentServices.length}`}
+                />
+              </Stack>
+            )}
           </Stack>
         </Box>
 
         <Box sx={{ px: 2, pb: 4 }}>
-          <Stack spacing={5}>
-            {_servicesByCategories
-              .filter((category) => category.name === categoryName)
-              .map((category) => (
-                <Box key={category.id}>
-                  <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 3 }}>
-                    <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                      {category.name}
-                    </Typography>
+          {currentCategory && (
+            <Stack spacing={2}>
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                  {currentCategory.name}
+                </Typography>
 
-                    <Chip
-                      size="small"
-                      color="primary"
-                      label={`${getServicesByCategory(category.name).length}`}
-                    />
+                <Chip size="small" color="primary" label={currentServices.length} />
 
-                    {CATEGORY_INFO[category.name]?.chips.map((chip, index) => (
+                {CATEGORY_INFO[categoryName as keyof typeof CATEGORY_INFO] &&
+                  CATEGORY_INFO[categoryName as keyof typeof CATEGORY_INFO].chips.map(
+                    (chip: CategoryChip, index: number) => (
                       <Chip
                         key={index}
                         size="small"
@@ -289,29 +288,25 @@ export default function ServiceListTemplate({ categoryName }: ServiceListTemplat
                         icon={<Iconify icon={chip.icon} width={16} />}
                         label={chip.label}
                       />
-                    ))}
-                  </Stack>
+                    )
+                  )}
+              </Stack>
 
-                  <Stack spacing={2}>
-                    {getServicesByCategory(category.name)
-                      .filter(
-                        (service) => typeof service.id === 'string' && service.id.trim() !== ''
-                      )
-                      .map((service) => (
-                        <ServiceCard
-                          key={service.id}
-                          service={service}
-                          language={language}
-                          onOrderClick={(s) => {
-                            setSelectedService(s);
-                            setOpenDialog(true);
-                          }}
-                        />
-                      ))}
-                  </Stack>
-                </Box>
-              ))}
-          </Stack>
+              <Stack spacing={2}>
+                {currentServices.map((service) => (
+                  <ServiceCard
+                    key={service.id}
+                    service={service}
+                    language={language}
+                    onOrderClick={(serviceData) => {
+                      setSelectedService(serviceData);
+                      setOpenDialog(true);
+                    }}
+                  />
+                ))}
+              </Stack>
+            </Stack>
+          )}
         </Box>
 
         <ServiceDialog

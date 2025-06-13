@@ -40,7 +40,6 @@ export const ROOM_SERVICES = [
     icon: 'carbon:bed',
     category: 'Өрөөний үйлчилгээ',
     subcategory: 'Ор дэвсгэр солих',
-    subcategory: 'Өрөөний үйлчилгээ',
     price: 10000,
   },
   {
