@@ -1,0 +1,60 @@
+import { _mock } from './_mock';
+
+export const ENTERTAINMENT_SERVICES = [
+  {
+    id: _mock.id(10),
+    title: 'Спа массаж',
+    icon: 'carbon:spa',
+    category: 'Энтертайнмент',
+    subcategory: 'Спа массаж',
+    price: 120000,
+  },
+  {
+    id: _mock.id(11),
+    title: 'Фитнесс',
+    icon: 'carbon:gym',
+    category: 'Энтертайнмент',
+    subcategory: 'Фитнесс',
+    price: 50000,
+  },
+  {
+    id: _mock.id(12),
+    title: 'Усан сан',
+    icon: 'carbon:swim',
+    category: 'Энтертайнмент',
+    subcategory: 'Усан сан',
+    price: 80000,
+  },
+  {
+    id: _mock.id(50),
+    title: 'Караоке',
+    icon: 'carbon:microphone',
+    category: 'Энтертайнмент',
+    subcategory: 'Караоке',
+    price: 100000,
+  },
+  {
+    id: _mock.id(51),
+    title: 'Бильярд',
+    icon: 'carbon:pool',
+    category: 'Энтертайнмент',
+    subcategory: 'Бильярд',
+    price: 20000,
+  },
+  {
+    id: _mock.id(52),
+    title: 'Боулинг',
+    icon: 'carbon:bowling',
+    category: 'Энтертайнмент',
+    subcategory: 'Боулинг',
+    price: 30000,
+  },
+  {
+    id: _mock.id(53),
+    title: 'Кино театр',
+    icon: 'carbon:movie',
+    category: 'Энтертайнмент',
+    subcategory: 'Кино театр',
+    price: 25000,
+  },
+];

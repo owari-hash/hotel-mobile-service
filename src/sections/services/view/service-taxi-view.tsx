@@ -5,20 +5,16 @@ import { useScroll } from 'framer-motion';
 import ScrollProgress from 'src/components/scroll-progress';
 import MobileContainer from 'src/components/shared/mobile-container';
 
-import ServiceHero from '../list/service-hero';
-import ServiceList from '../list/service-list';
+import ServiceTaxi from '../list/service-taxi';
 
 // ----------------------------------------------------------------------
 
-export default function ServiceView() {
+export default function ServiceTaxiView() {
   const { scrollYProgress } = useScroll();
   return (
-    <MobileContainer variant="mobile" disableGutters sx={{ mt: 0, pt: 0 }}>
+    <MobileContainer>
       <ScrollProgress scrollYProgress={scrollYProgress} />
-
-      <ServiceHero />
-
-      <ServiceList />
+      <ServiceTaxi />
     </MobileContainer>
   );
 }

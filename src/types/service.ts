@@ -24,8 +24,10 @@ export type IHotelCategoryProps = {
 export type Service = {
   id: string;
   title: string;
-  content: string;
+  content?: string;
   category: string;
+  subcategory?: string;
+
   icon: string;
   price?: number;
   location?: string;

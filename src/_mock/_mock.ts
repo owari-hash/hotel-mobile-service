@@ -112,7 +112,7 @@ export const _mock = {
       ['Монгол', 'Монгол', 'Монгол', 'Монгол', 'Монгол', 'Монгол', 'Монгол'][index],
   },
   slug: (index: number): string => {
-    const categories = ['room-service', 'extra-service', 'food', 'entertainment', 'taxi', 'guide'];
+    const categories = ['room', 'extra', 'food', 'entertainment', 'taxi', 'guide'];
     return categories[index] || 'other';
   },
 };

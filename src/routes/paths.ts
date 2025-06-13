@@ -3,8 +3,12 @@
 export const paths = {
   service: {
     root: '/service',
-    services: '/service',
-    help: '/service/help',
+    room: '/service/room-service',
+    food: '/service/food-service',
+    extra: '/service/extra-service',
+    entertainment: '/service/entertainment-service',
+    taxi: '/service/taxi-service',
+    guide: '/service/guide-service',
   },
 
   help: '/help', // Add new path for the help page
@@ -19,4 +23,4 @@ export const paths = {
   support: '/support',
   page404: '/error/404',
   page500: '/error/500',
-};
+} as const;

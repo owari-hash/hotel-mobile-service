@@ -29,6 +29,14 @@ export const navConfig = [
     title: 'Үйлчилгээ',
     path: paths.service.root,
     icon: 'carbon:service-desk',
+    children: [
+      { title: 'Өрөөний үйлчилгээ', path: paths.service.room },
+      { title: 'Нэмэлт үйлчилгээ', path: paths.service.extra },
+      { title: 'Хоол', path: paths.service.food },
+      { title: 'Энтертайнмент', path: paths.service.entertainment },
+      { title: 'Такси', path: paths.service.taxi },
+      { title: 'Хөтөч', path: paths.service.guide },
+    ],
   },
   {
     title: 'Тусламж',
@@ -37,7 +45,7 @@ export const navConfig = [
   },
   {
     title: 'Захиалга',
-    path: paths.service.help,
+    path: paths.help,
 
     icon: 'carbon:document',
   },

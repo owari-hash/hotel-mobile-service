@@ -30,37 +30,37 @@ const SERVICE_CATEGORIES = [
     id: '1',
     name: 'Өрөөний үйлчилгээ',
     icon: 'carbon:clean',
-    path: '/service',
+    path: '/service/room-service',
   },
   {
     id: '2',
     name: 'Нэмэлт үйлчилгээ',
     icon: 'carbon:add-alt',
-    path: '/service',
+    path: '/service/extra-service',
   },
   {
     id: '3',
     name: 'Хоол',
     icon: 'carbon:restaurant',
-    path: '/service',
+    path: '/service/food-service',
   },
   {
     id: '4',
     name: 'Энтертайнмент',
     icon: 'carbon:game-console',
-    path: '/services/entertainment',
+    path: '/service/entertainment-service',
   },
   {
     id: '5',
     name: 'Такси',
     icon: 'carbon:taxi',
-    path: '/services/taxi',
+    path: '/service/taxi-service',
   },
   {
     id: '6',
     name: 'Хөтөч',
     icon: 'carbon:compass',
-    path: '/services/maps',
+    path: '/service/guide-service',
   },
 ];
 

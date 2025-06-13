@@ -23,7 +23,7 @@ import CartSummary from './cart-summary';
 export default function CartView() {
   const theme = useTheme();
   const { items, removeItem, updateQuantity } = useCart();
-  const [language, setLanguage] = useState<string>('mn'); // 'mn' for Mongolian, 'en' for English
+  const [language, setLanguage] = useState<string>('mn');
 
   const toggleLanguage = () => {
     setLanguage((prev) => (prev === 'mn' ? 'en' : 'mn'));

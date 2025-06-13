@@ -10,7 +10,6 @@ import Image from 'src/components/image';
 import { bgGradient } from 'src/theme/css';
 import Iconify from 'src/components/iconify';
 
-// Use a direct import to ensure the image is properly loaded
 const bannerImage = '/assets/carousel/carousel_2.jpg';
 
 export default function ServiceHero() {
