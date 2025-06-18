@@ -1,18 +1,31 @@
 import { useState } from 'react';
 
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
+import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 import Iconify from 'src/components/iconify';
 import { FOOD_SERVICES, MEAL_CATEGORIES } from 'src/_mock/_food-services';
 
+import FoodMenuItemCard from './food-menu-item-card';
+
+interface FoodService {
+  id: string;
+  title: string;
+  icon: string;
+  image: string;
+  category: string;
+  subcategory: string;
+  mealType: string;
+  price: number;
+  content?: string;
+}
+
 type ServiceFoodProps = {
   language: string;
-  onOrderClick: (service: any) => void;
+  onOrderClick: (service: FoodService) => void;
 };
 
 export default function ServiceFood({ language, onOrderClick }: ServiceFoodProps) {
@@ -66,49 +79,13 @@ export default function ServiceFood({ language, onOrderClick }: ServiceFoodProps
         ))}
       </Stack>
 
-      <Stack spacing={2}>
+      <Grid container spacing={2}>
         {filteredServices.map((service) => (
-          <Card key={service.id} sx={{ p: 3 }}>
-            <Stack spacing={2}>
-              <Stack direction="row" spacing={2} alignItems="center">
-                <Box
-                  sx={{
-                    width: 48,
-                    height: 48,
-                    display: 'flex',
-                    borderRadius: 1,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    bgcolor: 'background.neutral',
-                  }}
-                >
-                  <Iconify icon={service.icon} width={24} />
-                </Box>
-
-                <Box sx={{ flexGrow: 1 }}>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-                    {service.title}
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    {service.content}
-                  </Typography>
-                  <Typography variant="subtitle2" sx={{ color: 'primary.main', mt: 0.5 }}>
-                    {service.price}₮
-                  </Typography>
-                </Box>
-
-                <Button
-                  variant="contained"
-                  onClick={() => onOrderClick(service)}
-                  startIcon={<Iconify icon="carbon:shopping-cart" />}
-                >
-                  {language === 'mn' ? 'Захиалах' : 'Order'}
-                </Button>
-              </Stack>
-            </Stack>
-          </Card>
+          <Grid item xs={12} sm={6} key={service.id}>
+            <FoodMenuItemCard service={service} language={language} onOrderClick={onOrderClick} />
+          </Grid>
         ))}
-      </Stack>
+      </Grid>
     </Box>
   );
 }

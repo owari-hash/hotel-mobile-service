@@ -10,16 +10,20 @@ import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 
+import { Service } from 'src/types/service';
 import Iconify from 'src/components/iconify';
-import { ROOM_SERVICES } from 'src/_mock/_room-services';
-import { FOOD_SERVICES } from 'src/_mock/_food-services';
-import { TAXI_SERVICES } from 'src/_mock/_taxi-services';
-import { GUIDE_SERVICES } from 'src/_mock/_guide-services';
-import { EXTRA_SERVICES } from 'src/_mock/_extra-services';
 import { _servicesByCategories } from 'src/_mock/_services';
 import ServiceDialog from 'src/components/dialog/ServiceDialog';
 import ServiceCard from 'src/components/service-card/service-card';
-import { ENTERTAINMENT_SERVICES } from 'src/_mock/_entertainment-services';
+import { ROOM_SERVICES, ROOM_SUBCATEGORIES } from 'src/_mock/_room-services';
+import { TAXI_SERVICES, TAXI_SUBCATEGORIES } from 'src/_mock/_taxi-services';
+import { FOOD_SERVICES, FOOD_SUBCATEGORIES } from 'src/_mock/_food-services';
+import { EXTRA_SERVICES, EXTRA_SUBCATEGORIES } from 'src/_mock/_extra-services';
+import { GUIDE_SERVICES, GUIDE_SUBCATEGORIES } from 'src/_mock/_guide-services';
+import {
+  ENTERTAINMENT_SERVICES,
+  ENTERTAINMENT_SUBCATEGORIES,
+} from 'src/_mock/_entertainment-services';
 
 type CategoryColor = 'success' | 'info' | 'warning' | 'default' | 'primary';
 type CategoryChip = {
@@ -28,47 +32,19 @@ type CategoryChip = {
   color: CategoryColor;
 };
 
-const CATEGORY_INFO = {
-  'Өрөөний үйлчилгээ': {
-    icon: 'mdi:room-service',
-    chips: [
-      { label: '24/7', icon: 'ic:round-access-time', color: 'success' },
-      { label: 'Өрөөнд', icon: 'ic:round-room', color: 'info' },
-    ],
-  },
-  Хоол: {
-    icon: 'ic:round-restaurant',
-    chips: [
-      { label: '30-40 мин', icon: 'ic:round-access-time', color: 'warning' },
-      { label: 'Хүргэлттэй', icon: 'ic:round-delivery-dining', color: 'info' },
-    ],
-  },
-  'Нэмэлт үйлчилгээ': {
-    icon: 'ic:round-more-horiz',
-    chips: [{ label: 'Тухай бүр', icon: 'ic:round-schedule', color: 'default' }],
-  },
-  Энтертайнмент: {
-    icon: 'ic:round-sports-esports',
-    chips: [{ label: 'Өдөр бүр', icon: 'ic:round-event', color: 'success' }],
-  },
-  Такси: {
-    icon: 'ic:round-local-taxi',
-    chips: [{ label: '24/7', icon: 'ic:round-access-time', color: 'success' }],
-  },
-  Хөтөч: {
-    icon: 'ic:round-tour',
-    chips: [{ label: 'Урьдчилан', icon: 'ic:round-event-available', color: 'info' }],
-  },
-} satisfies Record<string, { icon: string; chips: CategoryChip[] }>;
-
 interface ServiceListTemplateProps {
   categoryName: string;
 }
 
+// TODO: [Refactoring] This component is quite large and handles multiple responsibilities.
+// Consider breaking it down into smaller, more focused components or custom hooks
+// (e.g., a hook for scroll-based category detection, a component for rendering category chips,
+// and a component for rendering the list of services) to improve maintainability and readability.
 export default function ServiceListTemplate({ categoryName }: ServiceListTemplateProps) {
   const theme = useTheme();
   const router = useRouter();
   const [activeCategory, setActiveCategory] = useState<string>('');
+  const [activeSubcategory, setActiveSubcategory] = useState<string>('Бүгд'); // Default to 'Бүгд'
   const [language, setLanguage] = useState<string>('mn'); // 'mn' for Mongolian, 'en' for English
   const categoryRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const categoryBarRef = useRef<HTMLDivElement>(null);
@@ -85,7 +61,8 @@ export default function ServiceListTemplate({ categoryName }: ServiceListTemplat
       Object.entries(categoryRefs.current).forEach(([categoryId, ref]) => {
         if (ref) {
           const { top, bottom } = ref.getBoundingClientRect();
-          if (top <= viewportHeight * 0.5 && bottom >= 0) {
+          // Check if the category is in the middle of the viewport
+          if (top < viewportHeight / 2 && bottom > viewportHeight / 2) {
             currentActive = categoryId;
           }
         }
@@ -141,13 +118,41 @@ export default function ServiceListTemplate({ categoryName }: ServiceListTemplat
     }
   };
 
+  const getSubcategoriesForCategory = (name: string) => {
+    switch (name) {
+      case 'Хоол':
+        return FOOD_SUBCATEGORIES;
+      case 'Өрөөний үйлчилгээ':
+        return ROOM_SUBCATEGORIES;
+      case 'Нэмэлт үйлчилгээ':
+        return EXTRA_SUBCATEGORIES;
+      case 'Такси':
+        return TAXI_SUBCATEGORIES;
+      case 'Хөтөч':
+        return GUIDE_SUBCATEGORIES;
+      case 'Энтертайнмент':
+        return ENTERTAINMENT_SUBCATEGORIES;
+      default:
+        return [];
+    }
+  };
+
   const toggleLanguage = () => {
     setLanguage((prev) => (prev === 'mn' ? 'en' : 'mn'));
   };
 
   // Simplified category finding
   const currentCategory = _servicesByCategories.find((cat) => cat.name === categoryName);
-  const currentServices = getServicesByCategory(categoryName);
+
+  const currentServices = (() => {
+    const services = getServicesByCategory(categoryName);
+    const subcategories = getSubcategoriesForCategory(categoryName);
+
+    if (subcategories.length > 0 && activeSubcategory !== 'Бүгд') {
+      return services.filter((service) => service.subcategory === activeSubcategory);
+    }
+    return services;
+  })();
 
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
@@ -202,14 +207,7 @@ export default function ServiceListTemplate({ categoryName }: ServiceListTemplat
               }}
               size="small"
             >
-              <Iconify
-                icon={
-                  language === 'mn'
-                    ? 'emojione:flag-for-united-states'
-                    : 'emojione:flag-for-mongolia'
-                }
-                width={20}
-              />
+              <Iconify icon="eva:arrow-ios-back-fill" width={20} />
             </IconButton>
           </Stack>
 
@@ -227,42 +225,55 @@ export default function ServiceListTemplate({ categoryName }: ServiceListTemplat
               scrollbarWidth: 'none',
             }}
           >
-            {currentCategory && (
-              <Stack direction="row" alignItems="center" spacing={1}>
+            {getSubcategoriesForCategory(categoryName).length > 0 ? (
+              <>
                 <Chip
-                  id={`category-${currentCategory.id}`}
-                  label={currentCategory.name}
-                  variant="filled"
-                  color="primary"
-                  icon={
-                    <Iconify
-                      icon={currentCategory.icon}
-                      width={20}
-                      sx={{ color: 'common.white' }}
-                    />
-                  }
+                  id="category-Бүгд"
+                  label="Бүгд"
+                  variant={activeSubcategory === 'Бүгд' ? 'filled' : 'outlined'}
+                  color={activeSubcategory === 'Бүгд' ? 'primary' : 'default'}
+                  onClick={() => {
+                    setActiveSubcategory('Бүгд');
+                    scrollCategoryIntoView('Бүгд');
+                  }}
+                  sx={{
+                    minWidth: 80,
+                    '& .MuiChip-label': {
+                      fontWeight: activeSubcategory === 'Бүгд' ? 600 : 400,
+                    },
+                  }}
                 />
-
-                {CATEGORY_INFO[categoryName as keyof typeof CATEGORY_INFO] &&
-                  CATEGORY_INFO[categoryName as keyof typeof CATEGORY_INFO].chips.map(
-                    (chip: CategoryChip, index: number) => (
-                      <Chip
-                        key={index}
-                        label={chip.label}
-                        variant="outlined"
-                        color={chip.color}
-                        icon={<Iconify icon={chip.icon} width={18} />}
-                      />
-                    )
-                  )}
-
-                <Chip
-                  size="small"
-                  color="primary"
-                  variant="outlined"
-                  label={`${currentServices.length}`}
-                />
-              </Stack>
+                {getSubcategoriesForCategory(categoryName).map((subcat) => (
+                  <Chip
+                    key={subcat.name}
+                    id={`category-${subcat.name}`}
+                    label={subcat.name}
+                    variant={activeSubcategory === subcat.name ? 'filled' : 'outlined'}
+                    color={activeSubcategory === subcat.name ? 'primary' : 'default'}
+                    onClick={() => {
+                      setActiveSubcategory(subcat.name);
+                      scrollCategoryIntoView(subcat.name);
+                    }}
+                    sx={{
+                      minWidth: 80,
+                      '& .MuiChip-label': {
+                        fontWeight: activeSubcategory === subcat.name ? 600 : 400,
+                      },
+                    }}
+                  />
+                ))}
+              </>
+            ) : (
+              currentCategory && (
+                <Stack direction="row" alignItems="center" spacing={1}>
+                  <Chip
+                    id={`category-${currentCategory.id}`}
+                    label={currentCategory.name}
+                    variant="filled"
+                    color="primary"
+                  />
+                </Stack>
+              )
             )}
           </Stack>
         </Box>
@@ -270,30 +281,8 @@ export default function ServiceListTemplate({ categoryName }: ServiceListTemplat
         <Box sx={{ px: 2, pb: 4 }}>
           {currentCategory && (
             <Stack spacing={2}>
-              <Stack direction="row" alignItems="center" spacing={1}>
-                <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                  {currentCategory.name}
-                </Typography>
-
-                <Chip size="small" color="primary" label={currentServices.length} />
-
-                {CATEGORY_INFO[categoryName as keyof typeof CATEGORY_INFO] &&
-                  CATEGORY_INFO[categoryName as keyof typeof CATEGORY_INFO].chips.map(
-                    (chip: CategoryChip, index: number) => (
-                      <Chip
-                        key={index}
-                        size="small"
-                        variant="outlined"
-                        color={chip.color}
-                        icon={<Iconify icon={chip.icon} width={16} />}
-                        label={chip.label}
-                      />
-                    )
-                  )}
-              </Stack>
-
               <Stack spacing={2}>
-                {currentServices.map((service) => (
+                {currentServices.map((service: Service) => (
                   <ServiceCard
                     key={service.id}
                     service={service}

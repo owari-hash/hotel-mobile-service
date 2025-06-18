@@ -15,6 +15,8 @@ export const paths = {
 
   cart: '/cart',
 
+  order: '/order', // Add new path for the order page
+
   maintenance: '/maintenance',
   comingsoon: '/coming-soon',
   pricing01: '/pricing-01',

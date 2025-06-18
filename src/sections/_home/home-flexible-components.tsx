@@ -150,18 +150,18 @@ export default function HomeFlexibleComponents() {
                   size="large"
                   variant="contained"
                   color="primary"
-                  startIcon={<Iconify icon="carbon:add" />}
+                  startIcon={<Iconify icon="eva:arrow-ios-back-fill" />}
                 >
                   Add to cart
                 </Button>
 
                 <Fab variant="extended" color="inherit" aria-label="upload">
-                  <Iconify icon="carbon:cloud-upload" width={24} />
+                  <Iconify icon="eva:arrow-ios-back-fill" width={24} />
                   Upload
                 </Fab>
 
                 <Fab color="info" aria-label="media">
-                  <Iconify icon="carbon:media-library" />
+                  <Iconify icon="eva:arrow-ios-back-fill" />
                 </Fab>
 
                 <CircularProgress
@@ -194,15 +194,15 @@ export default function HomeFlexibleComponents() {
                   aria-label="text alignment"
                 >
                   <ToggleButton value="left" aria-label="alignment left">
-                    <Iconify icon="carbon:align-horizontal-left" />
+                    <Iconify icon="eva:arrow-ios-back-fill" />
                   </ToggleButton>
 
                   <ToggleButton value="center" aria-label="alignment center">
-                    <Iconify icon="carbon:align-horizontal-center" />
+                    <Iconify icon="eva:arrow-ios-back-fill" />
                   </ToggleButton>
 
                   <ToggleButton value="right" aria-label="alignment right">
-                    <Iconify icon="carbon:align-horizontal-right" />
+                    <Iconify icon="eva:arrow-ios-back-fill" />
                   </ToggleButton>
                 </ToggleButtonGroup>
 
@@ -271,7 +271,7 @@ export default function HomeFlexibleComponents() {
                   severity="success"
                   action={
                     <IconButton color="inherit" size="small" aria-label="close" onClick={() => {}}>
-                      <Iconify icon="carbon:close" />
+                      <Iconify icon="eva:arrow-ios-back-fill" />
                     </IconButton>
                   }
                 >

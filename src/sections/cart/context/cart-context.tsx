@@ -10,9 +10,9 @@ import {
   createContext,
 } from 'react';
 
-import { Service } from 'src/types/service';
-
-export type CartItem = Service & { quantity: number };
+import { Order } from 'src/types/order';
+import { CartItem } from 'src/types/cart';
+import { Service } from 'src/types/service'; // Import CartItem from new location
 
 type CartContextType = {
   items: CartItem[];
@@ -20,6 +20,7 @@ type CartContextType = {
   removeItem: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
+  placeOrder: () => void; // Add placeOrder to context type
   itemCount: number;
   totalAmount: number;
 };
@@ -30,6 +31,7 @@ const CartContext = createContext<CartContextType>({
   removeItem: () => {},
   updateQuantity: () => {},
   clearCart: () => {},
+  placeOrder: () => {}, // Initialize placeOrder
   itemCount: 0,
   totalAmount: 0,
 });
@@ -103,6 +105,43 @@ export function CartProvider({ children }: CartProviderProps) {
     setItems([]);
   }, []);
 
+  const generateOrderNumber = () => {
+    const timestamp = new Date().getTime();
+    const random = Math.floor(Math.random() * 1000);
+    return `ORD-${timestamp}-${random}`;
+  };
+
+  const placeOrder = useCallback(() => {
+    if (items.length === 0) {
+      alert('Таны сагс хоосон байна!');
+      return;
+    }
+
+    const newOrder: Order = {
+      id: `order-${Date.now()}`,
+      orderNumber: generateOrderNumber(),
+      orderDate: new Date(),
+      totalAmount: items.reduce((total, item) => total + (item.price || 0) * item.quantity, 0),
+      status: 'Pending',
+      items,
+    };
+
+    // Retrieve existing orders from local storage
+    const savedOrders = localStorage.getItem('user_orders');
+    const existingOrders: Order[] = savedOrders
+      ? JSON.parse(savedOrders).map((order: any) => ({
+          ...order,
+          orderDate: new Date(order.orderDate),
+        }))
+      : [];
+
+    // Add new order and save back to local storage
+    localStorage.setItem('user_orders', JSON.stringify([...existingOrders, newOrder]));
+
+    clearCart(); // Clear the current cart
+    alert('Захиалга амжилттай хийгдлээ!');
+  }, [items, clearCart]);
+
   const itemCount = items.reduce((count, item) => count + item.quantity, 0);
 
   const totalAmount = items.reduce((total, item) => total + (item.price || 0) * item.quantity, 0);
@@ -114,11 +153,13 @@ export function CartProvider({ children }: CartProviderProps) {
       removeItem,
       updateQuantity,
       clearCart,
+      placeOrder, // Add placeOrder to context value
       itemCount,
       totalAmount,
     }),
-    [items, addItem, removeItem, updateQuantity, clearCart, itemCount, totalAmount]
+    [items, addItem, removeItem, updateQuantity, clearCart, placeOrder, itemCount, totalAmount]
   );
 
   return <CartContext.Provider value={contextValue}>{children}</CartContext.Provider>;
 }
+export type { CartItem };

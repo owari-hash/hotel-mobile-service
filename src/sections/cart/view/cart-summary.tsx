@@ -7,18 +7,26 @@ import Typography from '@mui/material/Typography';
 import { Service } from 'src/types/service';
 import Iconify from 'src/components/iconify';
 
+import { useCart } from '../context/cart-context'; // Import useCart
+
 type CartSummaryProps = {
   items: (Service & { quantity: number })[];
   language: string;
 };
 
 export default function CartSummary({ items, language }: CartSummaryProps) {
+  const { placeOrder } = useCart(); // Access placeOrder from context
+
   const calculateSubtotal = () =>
     items.reduce((sum, item) => sum + (item.price || 0) * item.quantity, 0);
 
   const discount = 0; // In a real app, this would be calculated based on promotions or coupons
 
   const calculateTotal = () => calculateSubtotal() - discount;
+
+  const handleCheckout = () => {
+    placeOrder(); // Call placeOrder when button is clicked
+  };
 
   return (
     <Card sx={{ p: 3 }}>
@@ -54,9 +62,10 @@ export default function CartSummary({ items, language }: CartSummaryProps) {
 
         <Button
           fullWidth
-          size="large"
+          size="small"
           variant="contained"
           startIcon={<Iconify icon="eva:checkmark-circle-2-fill" />}
+          onClick={handleCheckout} // Attach handler
         >
           {language === 'mn' ? 'Захиалах' : 'Checkout'}
         </Button>

@@ -45,7 +45,7 @@ export const navConfig = [
   },
   {
     title: 'Захиалга',
-    path: paths.help,
+    path: paths.order,
 
     icon: 'carbon:document',
   },

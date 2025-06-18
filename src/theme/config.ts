@@ -4,6 +4,6 @@ export const CONTAINER_SIZES = {
     mx: 'auto',
     // px: { xs: 2, sm: 3 },
     pt: 0, // Changed from pt: 3 to remove top spacing
-    px: 2,
+    px: 0,
   },
 } as const;

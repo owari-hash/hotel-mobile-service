@@ -1,121 +1,89 @@
 import { _mock } from './_mock';
 
+export const ROOM_SERVICE_CATEGORIES = [
+  { id: 'all', label: 'Бүгд' },
+  { id: 'cleaning', label: 'Өрөө цэвэрлэгээ' },
+  { id: 'laundry', label: 'Хувцас угаалга' },
+  { id: 'maintenance', label: 'Засвар үйлчилгээ' },
+  { id: 'extra_bed', label: 'Нэмэлт ор' },
+];
+
 export const ROOM_SERVICES = [
   {
-    id: _mock.id(0),
-    title: 'Менежертэй холбогдох',
-    icon: 'carbon:phone',
-    category: 'Өрөөний үйлчилгээ',
-    subcategory: 'Менежертэй холбогдох',
-    content: `Менежертэй холбогдох үйлчилгээ нь таны санал, хүсэлт, асуудлыг шуурхай шийдвэрлэхэд тусална.`,
-    price: 0,
-  },
-  {
     id: _mock.id(1),
-    title: 'Өрөө цэвэрлэх',
-    icon: 'carbon:clean',
+    title: 'Өрөө цэвэрлэгээ',
+    icon: 'carbon:tool-box',
     category: 'Өрөөний үйлчилгээ',
-    price: 12000,
-    content: `
-      Өрөө цэвэрлэх үйлчилгээ
-      Таны өрөөг өдөр бүр стандартын дагуу цэвэрлэж, тав тухтай орчинг бүрдүүлнэ.
-
-      Бүтэн өрөөний тоос соруулах
-      Ариун цэврийн өрөө цэвэрлэх
-      Тавилга арчих
-
-    `,
+    subcategory: 'Өрөө цэвэрлэгээ',
+    price: 0,
+    content: 'Өрөөг бүрэн цэвэрлэнэ.',
   },
   {
     id: _mock.id(2),
-    title: 'Өрөөний үйлчилгээ',
-    icon: 'carbon:room-service',
+    title: 'Хувцас угаалга (Энгийн)',
+    icon: 'carbon:tool-box',
     category: 'Өрөөний үйлчилгээ',
-    subcategory: 'Өрөө цэвэрлэх',
+    subcategory: 'Хувцас угаалга',
     price: 15000,
+    content: 'Энгийн хувцас угаалга, индүүдлэг.',
   },
   {
     id: _mock.id(3),
-    title: 'Ор дэвсгэр солих',
-    icon: 'carbon:bed',
+    title: 'Хувцас угаалга (Хими цэвэрлэгээ)',
+    icon: 'carbon:tool-box',
     category: 'Өрөөний үйлчилгээ',
-    subcategory: 'Ор дэвсгэр солих',
-    price: 10000,
-  },
-  {
-    id: _mock.id(33),
-    title: 'Ор хожуу суллах (18:00 хүртэл)',
-    icon: 'carbon:clock',
-    category: 'Өрөөний үйлчилгээ',
-    subcategory: 'Ор хожуу суллах',
+    subcategory: 'Хувцас угаалга',
     price: 30000,
-    content: `
-      <h5>Ор хожуу суллах</h5>
-      <p>18:00 цаг хүртэл өрөөг ашиглах боломжтой. Нөхцөлөөс шалтгаалан төлбөртэй.</p>
-    `,
+    content: 'Хими цэвэрлэгээ шаардлагатай хувцас.',
   },
   {
-    id: _mock.id(34),
-    title: 'Дуудлага сэрүүлэг',
-    icon: 'carbon:alarm',
+    id: _mock.id(4),
+    title: 'Агааржуулагчийн засвар',
+    icon: 'carbon:tool-box',
     category: 'Өрөөний үйлчилгээ',
-    subcategory: 'Дуудлага сэрүүлэг',
+    subcategory: 'Засвар үйлчилгээ',
     price: 0,
+    content: 'Агааржуулагчийн хэвийн ажиллагааг хангана.',
   },
   {
-    id: _mock.id(35),
-    title: 'Нэмэлт өрөөний хугацаа',
-    icon: 'carbon:time',
+    id: _mock.id(5),
+    title: 'Сантехникийн засвар',
+    icon: 'carbon:tool-box',
     category: 'Өрөөний үйлчилгээ',
-    subcategory: 'Нэмэлт өрөөний хугацаа',
-    price: 20000,
-  },
-  {
-    id: _mock.id(36),
-    title: 'Менежерт зурвас илгээх',
-    icon: 'carbon:message',
-    category: 'Өрөөний үйлчилгээ',
-    subcategory: 'Менежерт зурвас илгээх',
+    subcategory: 'Засвар үйлчилгээ',
     price: 0,
-    content: `
-      <h5>Менежерт зурвас</h5>
-      <p>Танд санал, хүсэлт, асуудал байгаа бол эндээс шууд мессеж илгээнэ үү.</p>
-    `,
+    content: 'Ус алдагдах, бөглөрөх зэрэг асуудлыг шийдвэрлэнэ.',
   },
   {
-    id: _mock.id(42),
-    title: 'Цонх онгойлгох',
-    icon: 'carbon:window',
+    id: _mock.id(6),
+    title: 'Нэмэлт ор',
+    icon: 'carbon:tool-box',
     category: 'Өрөөний үйлчилгээ',
-    subcategory: 'Цонх онгойлгох',
-    price: 0,
-    content: `
-      <h5>Цонх онгойлгох</h5>
-      <p>Таны хүсэлтээр цонхыг онгойлгож, цэвэр агаар оруулна.</p>
-    `,
+    subcategory: 'Нэмэлт ор',
+    price: 50000,
+    content: 'Нэг хүний нэмэлт ор.',
+  },
+];
+
+export const ROOM_SUBCATEGORIES = [
+  {
+    name: 'Өрөө цэвэрлэгээ',
+    icon: '/assets/icons/services/service-bell.svg',
+    items: ROOM_SERVICES.filter((item) => item.subcategory === 'Өрөө цэвэрлэгээ'),
   },
   {
-    id: _mock.id(43),
-    title: 'Халаалт тохируулах',
-    icon: 'carbon:temperature',
-    category: 'Өрөөний үйлчилгээ',
-    subcategory: 'Халаалт тохируулах',
-    price: 0,
-    content: `
-      <h5>Халаалт тохируулах</h5>
-      <p>Өрөөний халаалтыг таны хүссэн хэмд тохируулна.</p>
-    `,
+    name: 'Хувцас угаалга',
+    icon: '/assets/icons/services/service-extra.svg',
+    items: ROOM_SERVICES.filter((item) => item.subcategory === 'Хувцас угаалга'),
   },
   {
-    id: _mock.id(44),
-    title: 'Хөргөгч дүүргэх',
-    icon: 'carbon:refrigerator',
-    category: 'Өрөөний үйлчилгээ',
-    subcategory: 'Хөргөгч дүүргэх',
-    price: 5000,
-    content: `
-      <h5>Мини хөргөгч дүүргэх</h5>
-      <p>Мини хөргөгчийг таны хүссэн ундаа, зуушаар дүүргэнэ.</p>
-    `,
+    name: 'Засвар үйлчилгээ',
+    icon: '/assets/icons/services/service-bell.svg',
+    items: ROOM_SERVICES.filter((item) => item.subcategory === 'Засвар үйлчилгээ'),
+  },
+  {
+    name: 'Нэмэлт ор',
+    icon: '/assets/icons/services/service-bell.svg',
+    items: ROOM_SERVICES.filter((item) => item.subcategory === 'Нэмэлт ор'),
   },
 ];

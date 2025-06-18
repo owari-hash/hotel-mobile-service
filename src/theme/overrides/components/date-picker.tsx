@@ -17,15 +17,15 @@ const dateList = [
 
 const timeList = ['TimePicker', 'MobileTimePicker', 'StaticTimePicker', 'DesktopTimePicker'];
 
-const switchIcon = () => <Iconify icon="eva:chevron-down-fill" width={24} />;
+const switchIcon = () => <Iconify icon="eva:arrow-ios-back-fill" width={24} />;
 
 const leftIcon = () => <Iconify icon="eva:arrow-ios-back-fill" width={24} />;
 
-const rightIcon = () => <Iconify icon="eva:arrow-ios-forward-fill" width={24} />;
+const rightIcon = () => <Iconify icon="eva:arrow-ios-back-fill" width={24} />;
 
-const calendarIcon = () => <Iconify icon="solar:calendar-minimalistic-linear" width={24} />;
+const calendarIcon = () => <Iconify icon="eva:arrow-ios-back-fill" width={24} />;
 
-const clockIcon = () => <Iconify icon="solar:clock-circle-outline" width={24} />;
+const clockIcon = () => <Iconify icon="eva:arrow-ios-back-fill" width={24} />;
 
 const desktopTypes = dateList.reduce((result: Record<string, any>, currentValue) => {
   result[`Mui${currentValue}`] = {

@@ -17,6 +17,7 @@ export type IHotelCategoryProps = {
   id: string;
   name: string;
   icon: string;
+  image: string; // Added image property
   path: string;
   totalService?: number;
 };

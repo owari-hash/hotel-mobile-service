@@ -4,7 +4,7 @@ export const TAXI_SERVICES = [
   {
     id: _mock.id(13),
     title: 'Такси захиалах',
-    icon: 'carbon:taxi',
+    icon: 'carbon:tool-box',
     category: 'Такси',
     subcategory: 'Такси захиалах',
     price: 30000,
@@ -12,7 +12,7 @@ export const TAXI_SERVICES = [
   {
     id: _mock.id(14),
     title: 'Нисэх онгоцны буудал',
-    icon: 'carbon:airport',
+    icon: 'carbon:tool-box',
     category: 'Такси',
     subcategory: 'Нисэх онгоцны буудал',
     price: 50000,
@@ -20,7 +20,7 @@ export const TAXI_SERVICES = [
   {
     id: _mock.id(15),
     title: 'Хот тойрох',
-    icon: 'carbon:car',
+    icon: 'carbon:tool-box',
     category: 'Такси',
     subcategory: 'Хот тойрох',
     price: 100000,
@@ -28,7 +28,7 @@ export const TAXI_SERVICES = [
   {
     id: _mock.id(54),
     title: 'Түрээсийн машин',
-    icon: 'carbon:car-rental',
+    icon: 'carbon:tool-box',
     category: 'Такси',
     subcategory: 'Түрээсийн машин',
     price: 200000,
@@ -40,7 +40,7 @@ export const TAXI_SERVICES = [
   {
     id: _mock.id(55),
     title: 'Ачаа тээвэр',
-    icon: 'carbon:delivery',
+    icon: 'carbon:tool-box',
     category: 'Такси',
     subcategory: 'Ачаа тээвэр',
     price: 50000,
@@ -48,5 +48,33 @@ export const TAXI_SERVICES = [
       <h5>Ачаа тээвэр</h5>
       <p>Хүнд болон хөнгөн ачаа тээврийн үйлчилгээ.</p>
     `,
+  },
+];
+
+export const TAXI_SUBCATEGORIES = [
+  {
+    name: 'Такси захиалах',
+    icon: '/assets/icons/services/service-taxi.svg',
+    items: TAXI_SERVICES.filter((item) => item.subcategory === 'Такси захиалах'),
+  },
+  {
+    name: 'Нисэх онгоцны буудал',
+    icon: '/assets/icons/services/service-taxi.svg',
+    items: TAXI_SERVICES.filter((item) => item.subcategory === 'Нисэх онгоцны буудал'),
+  },
+  {
+    name: 'Хот тойрох',
+    icon: '/assets/icons/services/service-taxi.svg',
+    items: TAXI_SERVICES.filter((item) => item.subcategory === 'Хот тойрох'),
+  },
+  {
+    name: 'Түрээсийн машин',
+    icon: '/assets/icons/services/service-taxi.svg',
+    items: TAXI_SERVICES.filter((item) => item.subcategory === 'Түрээсийн машин'),
+  },
+  {
+    name: 'Ачаа тээвэр',
+    icon: '/assets/icons/services/service-taxi.svg',
+    items: TAXI_SERVICES.filter((item) => item.subcategory === 'Ачаа тээвэр'),
   },
 ];

@@ -11,20 +11,20 @@ import { varFade, MotionViewport } from 'src/components/animate';
 // ----------------------------------------------------------------------
 
 const FEATURE_HIGHLIGHTS = [
-  { title: '5 Prebuilt Websites', icon: 'carbon:application-web' },
-  { title: '60+ Demo Page', icon: 'carbon:stacked-scrolling-2' },
-  { title: 'Easy to Customize', icon: 'carbon:settings-adjust' },
-  { title: 'Color Presets', icon: 'carbon:color-switch' },
-  { title: 'Dark Mode', icon: 'carbon:asleep' },
-  { title: 'Awesome Animation', icon: 'carbon:boolean' },
-  { title: 'Google Fonts', icon: 'carbon:text-font' },
-  { title: 'Figma Design', icon: 'ph:figma-logo' },
-  { title: 'Fully Responsive', icon: 'carbon:devices' },
-  { title: 'Mega Menu', icon: 'carbon:list-dropdown' },
-  { title: 'Clean Markup', icon: 'carbon:script' },
-  { title: 'Free Updates', icon: 'carbon:update-now' },
-  { title: 'Fast Support', icon: 'carbon:headset' },
-  { title: 'Well Documented', icon: 'carbon:notebook' },
+  { title: '5 Prebuilt Websites', icon: 'eva:arrow-ios-back-fill' },
+  { title: '60+ Demo Page', icon: 'eva:arrow-ios-back-fill' },
+  { title: 'Easy to Customize', icon: 'eva:arrow-ios-back-fill' },
+  { title: 'Color Presets', icon: 'eva:arrow-ios-back-fill' },
+  { title: 'Dark Mode', icon: 'eva:arrow-ios-back-fill' },
+  { title: 'Awesome Animation', icon: 'eva:arrow-ios-back-fill' },
+  { title: 'Google Fonts', icon: 'eva:arrow-ios-back-fill' },
+  { title: 'Figma Design', icon: 'eva:arrow-ios-back-fill' },
+  { title: 'Fully Responsive', icon: 'eva:arrow-ios-back-fill' },
+  { title: 'Mega Menu', icon: 'eva:arrow-ios-back-fill' },
+  { title: 'Clean Markup', icon: 'eva:arrow-ios-back-fill' },
+  { title: 'Free Updates', icon: 'eva:arrow-ios-back-fill' },
+  { title: 'Fast Support', icon: 'eva:arrow-ios-back-fill' },
+  { title: 'Well Documented', icon: 'eva:arrow-ios-back-fill' },
 ];
 
 // ----------------------------------------------------------------------

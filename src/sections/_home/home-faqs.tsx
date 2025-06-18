@@ -103,10 +103,7 @@ export default function HomeFAQs() {
                       {faq.question}
                     </Typography>
 
-                    <Iconify
-                      width={24}
-                      icon={expanded === faq.question ? 'carbon:subtract' : 'carbon:add'}
-                    />
+                    <Iconify width={24} icon="eva:arrow-ios-back-fill" />
                   </AccordionSummary>
 
                   <AccordionDetails>{faq.answer}</AccordionDetails>

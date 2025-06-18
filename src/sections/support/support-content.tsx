@@ -53,9 +53,7 @@ export default function SupportContent({ contents }: Props) {
               {faq.question}
             </Typography>
 
-            <Iconify
-              icon={expanded === faq.question ? 'carbon:chevron-down' : 'carbon:chevron-right'}
-            />
+            <Iconify icon="eva:arrow-ios-back-fill" />
           </AccordionSummary>
 
           <AccordionDetails sx={{ color: 'text.secondary' }}>{faq.answer}</AccordionDetails>

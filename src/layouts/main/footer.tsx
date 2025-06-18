@@ -19,16 +19,15 @@ export default function Footer() {
   return (
     <Container
       sx={{
-        width: { xs: '100%', sm: '80%', lg: '40%' },
-        mx: 'auto',
         textAlign: 'center',
         py: { xs: 2, sm: 3 },
-        px: { xs: 2, sm: 3 },
-        mb: { xs: 15, sm: 16 },
+        mb: 0,
         bgcolor: 'background.paper',
         borderRadius: 2,
         boxShadow: (theme) => theme.customShadows.z8,
       }}
+      disableGutters
+      maxWidth={false}
     >
       <Stack spacing={2}>
         <Stack

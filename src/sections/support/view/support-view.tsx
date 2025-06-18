@@ -82,7 +82,7 @@ export default function SupportView() {
         }}
       >
         <IconButton onClick={mobileOpen.onTrue}>
-          <Iconify icon="carbon:menu" />
+          <Iconify icon="eva:arrow-ios-back-fill" />
         </IconButton>
       </Stack>
 

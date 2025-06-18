@@ -1,14 +1,12 @@
 import React from 'react';
+import Image from 'next/image';
 
 import Box from '@mui/material/Box';
-import Chip from '@mui/material/Chip';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-
-import Iconify from 'src/components/iconify';
 
 interface ServiceCardProps {
   service: {
@@ -17,6 +15,8 @@ interface ServiceCardProps {
     title: string;
     content?: string;
     category: string;
+    image?: string; // Added image field
+    price?: number; // Added price field
   };
   language: string;
   onOrderClick: (service: any) => void;
@@ -27,10 +27,8 @@ export default function ServiceCard({ service, language, onOrderClick }: Service
 
   return (
     <Card
-      key={service.id}
       sx={{
-        p: 3,
-        minHeight: 120,
+        p: 0, // Reset card padding
         transition: 'all 0.2s ease-in-out',
         '&:hover': {
           boxShadow: theme.customShadows.z16,
@@ -38,65 +36,107 @@ export default function ServiceCard({ service, language, onOrderClick }: Service
         },
       }}
     >
-      <Stack spacing={2} sx={{ height: '100%' }}>
-        <Stack direction="row" alignItems="center" spacing={2} sx={{ flex: 1 }}>
+      {service.category === 'Хөтөч' ? (
+        <>
           <Box
             sx={{
-              width: 48,
-              height: 48,
-              display: 'flex',
-              borderRadius: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              bgcolor: 'background.neutral',
+              width: 'auto',
+              height: 200,
+              position: 'relative',
+              overflow: 'hidden',
+              borderRadius: 2,
+              m: 3, // Equal margin on all sides
             }}
           >
-            <Iconify icon={service.icon} width={24} />
+            {service.image && (
+              <Image
+                src={service.image}
+                alt={service.title}
+                fill
+                style={{
+                  objectFit: 'cover',
+                  borderRadius: '16px',
+                }}
+                priority
+              />
+            )}
           </Box>
 
-          <Box sx={{ flexGrow: 1 }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-              {service.title}
-            </Typography>
-            <Chip
-              label={service.category}
-              size="small"
-              sx={{
-                mt: 0.5,
-                bgcolor: 'primary.main',
-                color: 'primary.contrastText',
-              }}
-            />
-            <Typography
-              variant="body2"
-              sx={{
-                color: 'text.secondary',
-                mt: 0.5,
-                lineHeight: 1.5,
-              }}
-            >
-              {service.content}
-            </Typography>
+          <Box sx={{ px: 3, pb: 3 }}>
+            <Stack spacing={2}>
+              <Box sx={{ pl: 1 }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+                  {service.title}
+                </Typography>
+                {service.content && (
+                  <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
+                    {service.content}
+                  </Typography>
+                )}
+                <Typography variant="subtitle2" sx={{ color: 'primary.main', mt: 0.5 }}>
+                  {service.price}₮
+                </Typography>
+              </Box>
+
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', pl: 1 }}>
+                <Button variant="contained" size="small" onClick={() => onOrderClick(service)}>
+                  {language === 'mn' ? 'Захиалах' : 'Order'}
+                </Button>
+              </Box>
+            </Stack>
           </Box>
-
-          <Typography variant="subtitle1" sx={{ color: 'primary.main', whiteSpace: 'nowrap' }} />
-        </Stack>
-
-        <Stack direction="row" justifyContent="flex-end">
-          <Button
-            variant="contained"
-            startIcon={<Iconify icon="carbon:calendar" />}
-            onClick={() => onOrderClick(service)}
+        </>
+      ) : (
+        <Stack
+          direction="row"
+          spacing={1}
+          alignItems="center"
+          sx={{ height: '100%', width: '100%' }}
+        >
+          <Box
             sx={{
-              width: { xs: '40%', sm: 'auto' },
-              py: 1.5,
-              fontWeight: 600,
+              width: 160, // Fixed width for the image container
+              height: 130, // Fixed height for the image container (square)
+              flexShrink: 0, // Prevent image from shrinking
+              position: 'relative',
+              overflow: 'hidden',
+              borderRadius: 1, // Use a slight border radius, not circular
             }}
           >
-            {language === 'mn' ? 'Захиалах' : 'Order'}
-          </Button>
+            {service.image && (
+              <Image
+                src={service.image}
+                alt={service.title}
+                fill
+                style={{
+                  objectFit: 'cover',
+                }}
+                priority
+              />
+            )}
+          </Box>
+          <Stack spacing={1} sx={{ flexGrow: 1, justifyContent: 'space-between', p: 1 }}>
+            <Box>
+              <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+                {service.title}
+              </Typography>
+              {service.content && (
+                <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
+                  {service.content}
+                </Typography>
+              )}
+            </Box>
+            <Typography variant="subtitle2" sx={{ color: 'primary.main', mt: 0.5 }}>
+              {service.price}₮
+            </Typography>
+            <Stack direction="row" justifyContent="flex-end">
+              <Button variant="contained" size="small" onClick={() => onOrderClick(service)}>
+                {language === 'mn' ? 'Захиалах' : 'Order'}
+              </Button>
+            </Stack>
+          </Stack>
         </Stack>
-      </Stack>
+      )}
     </Card>
   );
 }

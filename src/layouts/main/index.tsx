@@ -11,18 +11,9 @@ import Footer from './footer';
 
 // ----------------------------------------------------------------------
 
-const pathsOnDark = ['/career', '/career/', '/travel', '/travel/'];
+const pathsOnDark = ['/career', '/travel'];
 
-const spacingLayout = [
-  ...pathsOnDark,
-  '/',
-  '/service', // Re-add service to spacingLayout if it was removed, as it needs to be excluded from spacing
-  '/help', // Add the new help page to exclude it from spacing
-  '/e-learning',
-  '/e-learning/',
-  '/marketing',
-  '/marketing/',
-];
+const spacingLayout = [...pathsOnDark, '/', '/service', '/help', '/e-learning', '/marketing'];
 
 type Props = {
   children: React.ReactNode;
@@ -31,7 +22,7 @@ type Props = {
 export default function MainLayout({ children }: Props) {
   const pathname = usePathname();
 
-  const actionPage = (arr: string[]) => arr.some((path) => pathname === path);
+  const actionPage = (arr: string[]) => arr.some((path) => pathname.startsWith(path));
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: 1 }}>
@@ -41,6 +32,7 @@ export default function MainLayout({ children }: Props) {
         component="main"
         sx={{
           flexGrow: 1,
+          pb: { xs: 15, md: 0 }, // Increased padding-bottom
         }}
       >
         {!actionPage(spacingLayout) && <Spacing />}

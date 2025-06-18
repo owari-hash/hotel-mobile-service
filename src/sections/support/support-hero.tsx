@@ -40,7 +40,7 @@ export default function SupportHero() {
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <Iconify icon="carbon:search" width={24} sx={{ color: 'text.disabled' }} />
+              <Iconify icon="eva:arrow-ios-back-fill" width={24} sx={{ color: 'text.disabled' }} />
             </InputAdornment>
           ),
           sx: { color: 'common.white' },

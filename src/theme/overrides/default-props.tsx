@@ -75,7 +75,7 @@ export function defaultProps(theme: Theme) {
     },
     MuiChip: {
       defaultProps: {
-        deleteIcon: <Iconify icon="solar:close-circle-bold" />,
+        deleteIcon: <Iconify icon="eva:arrow-ios-back-fill" />,
       },
     },
     MuiRadio: {
@@ -136,10 +136,10 @@ export function defaultProps(theme: Theme) {
     MuiAlert: {
       defaultProps: {
         iconMapping: {
-          error: <Iconify icon="solar:danger-linear" width={24} />,
-          info: <Iconify icon="carbon:information" width={24} />,
-          success: <Iconify icon="carbon:checkmark-outline" width={24} />,
-          warning: <Iconify icon="carbon:warning-alt" width={24} />,
+          error: <Iconify icon="eva:arrow-ios-back-fill" width={24} />,
+          info: <Iconify icon="eva:arrow-ios-back-fill" width={24} />,
+          success: <Iconify icon="eva:arrow-ios-back-fill" width={24} />,
+          warning: <Iconify icon="eva:arrow-ios-back-fill" width={24} />,
         },
       },
     },

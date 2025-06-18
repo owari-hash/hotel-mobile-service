@@ -72,7 +72,7 @@ export default function ComingSoonView() {
       <Stack direction="row" justifyContent="center">
         {_socials.map((social) => (
           <IconButton key={social.value}>
-            <Iconify icon={social.icon} sx={{ color: social.color }} />
+            <Iconify icon="eva:arrow-ios-back-fill" sx={{ color: social.color }} />
           </IconButton>
         ))}
       </Stack>

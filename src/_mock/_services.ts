@@ -80,10 +80,30 @@ export const _servicesByCategories = Array.from(
   return {
     id: String(index + 1), // Simple ID generation
     name: category,
-    icon: firstService?.icon || '/assets/icons/services/service-bell.svg', // Use first service's icon or a default
+    icon:
+      (category === 'Өрөөний үйлчилгээ' && '/assets/icons/services/service-bell.svg') ||
+      (category === 'Нэмэлт үйлчилгээ' && '/assets/icons/services/service-extra.svg') ||
+      (category === 'Хоол' && '/assets/icons/services/service-food.svg') ||
+      (category === 'Энтертайнмент' && '/assets/icons/services/service-entertainment.svg') ||
+      (category === 'Такси' && '/assets/icons/services/service-taxi.svg') ||
+      (category === 'Хөтөч' && '/assets/icons/services/service-guide.svg') ||
+      '/assets/icons/services/service-bell.svg', // Fallback to default
+    image:
+      (category === 'Өрөөний үйлчилгээ' && '/assets/Food/food.jpg') ||
+      (category === 'Нэмэлт үйлчилгээ' && '/assets/Food/food.jpg') ||
+      (category === 'Хоол' && '/assets/Food/food.jpg') ||
+      (category === 'Энтертайнмент' && '/assets/Food/food.jpg') ||
+      (category === 'Такси' && '/assets/Food/food.jpg') ||
+      (category === 'Хөтөч' && '/assets/Food/food.jpg') ||
+      '/assets/images/category_default.jpg', // Fallback to default image
     path:
-      paths.service[category.toLowerCase().replace(/ /g, '') as keyof typeof paths.service] ||
-      paths.service.root, // Dynamic path
+      (category === 'Өрөөний үйлчилгээ' && paths.service.room) ||
+      (category === 'Нэмэлт үйлчилгээ' && paths.service.extra) ||
+      (category === 'Хоол' && paths.service.food) ||
+      (category === 'Энтертайнмент' && paths.service.entertainment) ||
+      (category === 'Такси' && paths.service.taxi) ||
+      (category === 'Хөтөч' && paths.service.guide) ||
+      paths.service.root, // Fallback to root
     subcategories: Array.from(
       new Set(servicesInCategory.map((service) => service.subcategory))
     ).map((subcategory, subIndex) => ({

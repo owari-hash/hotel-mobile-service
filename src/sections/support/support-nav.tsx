@@ -101,17 +101,17 @@ export default function SupportNav({ topic, data, onChangeTopic, open, onClose }
 
         <Stack spacing={2}>
           <StyledButton>
-            <Iconify icon="carbon:email" width={24} />
+            <Iconify icon="eva:arrow-ios-back-fill" width={24} />
             <Typography variant="subtitle2">Email</Typography>
           </StyledButton>
 
           <StyledButton>
-            <Iconify icon="carbon:chat" width={24} />
+            <Iconify icon="eva:arrow-ios-back-fill" width={24} />
             <Typography variant="subtitle2">Chat Now</Typography>
           </StyledButton>
 
           <StyledButton>
-            <Iconify icon="carbon:mobile" width={24} />
+            <Iconify icon="eva:arrow-ios-back-fill" width={24} />
             <Typography variant="subtitle2">
               {`Call `}
               <Box component="span" sx={{ color: 'primary.main' }}>

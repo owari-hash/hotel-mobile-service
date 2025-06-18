@@ -1,15 +1,13 @@
-import Link from 'next/link';
 import { m, LazyMotion, domAnimation } from 'framer-motion';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
-import SvgColor from 'src/components/svg-color';
-import TextMaxLine from 'src/components/text-max-line';
 import { IHotelCategoryProps } from 'src/types/service';
+
+import CategoryCard from './components/category-card';
 
 // ----------------------------------------------------------------------
 
@@ -45,9 +43,8 @@ export default function HomeLandingHotCategories({ categories }: Props) {
         }}
       >
         <Container
-          maxWidth="sm"
           sx={{
-            px: { xs: 1.5, sm: 2 }, // Adjusted padding for mobile
+            px: 0,
           }}
         >
           <m.div
@@ -111,153 +108,12 @@ export default function HomeLandingHotCategories({ categories }: Props) {
               position: 'relative',
             }}
           >
-            {categories.map((category, index) => (
-              <m.div
-                key={category.id}
-                initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{
-                  duration: 0.5,
-                  delay: index * 0.1,
-                  type: 'spring',
-                  stiffness: 120,
-                  damping: 20,
-                }}
-              >
-                <CategoryItem category={category} index={index} />
-              </m.div>
+            {categories.map((category) => (
+              <CategoryCard key={category.id} category={category} />
             ))}
           </Box>
         </Container>
       </Box>
     </LazyMotion>
-  );
-}
-
-// ----------------------------------------------------------------------
-
-type CategoryItemProps = {
-  category: IHotelCategoryProps;
-  index: number;
-};
-
-function CategoryItem({ category, index }: CategoryItemProps) {
-  return (
-    <Link href={category.path} style={{ textDecoration: 'none' }}>
-      <Paper
-        component={m.div}
-        whileTap={{ scale: 0.97 }}
-        transition={{
-          type: 'spring',
-          stiffness: 300,
-          damping: 25,
-        }}
-        elevation={0}
-        sx={{
-          height: { xs: 140, sm: 160 },
-          borderRadius: 4,
-          position: 'relative',
-          overflow: 'hidden',
-          background: (theme) => theme.palette.background.paper,
-          border: '1px solid',
-          borderColor: 'divider',
-          transition: 'background 0.2s ease',
-
-          // Touch feedback only
-          '&:active': {
-            background: (theme) => theme.palette.primary.lighter,
-            borderColor: 'primary.main',
-            transform: 'scale(0.98)',
-            '& .category-icon': {
-              background: (theme) => theme.palette.primary.main,
-              transform: 'scale(0.95)',
-              '& svg': {
-                color: 'common.white',
-                transform: 'scale(1.1)',
-              },
-            },
-            '& .category-text': {
-              color: 'primary.main',
-            },
-          },
-        }}
-      >
-        <Stack
-          alignItems="center"
-          justifyContent="center"
-          spacing={{ xs: 1, sm: 2 }} // Reduced spacing on mobile
-          sx={{
-            height: '100%',
-            p: { xs: 1.5, sm: 3 }, // Reduced padding on mobile
-            position: 'relative',
-            zIndex: 1,
-          }}
-        >
-          {/* Icon Container */}
-          <Box
-            className="category-icon"
-            sx={{
-              width: { xs: 48, sm: 64 }, // Smaller icon on mobile
-              height: { xs: 48, sm: 64 },
-              borderRadius: 3,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              position: 'relative',
-              transition: 'background 0.2s ease',
-              background: (theme) => theme.palette.background.neutral,
-            }}
-          >
-            <SvgColor
-              src={category.icon}
-              sx={{
-                width: { xs: 24, sm: 32 }, // Smaller icon size on mobile
-                height: { xs: 24, sm: 32 },
-                color: 'primary.main',
-                filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))',
-              }}
-            />
-          </Box>
-
-          {/* Category Name */}
-          <TextMaxLine
-            className="category-text"
-            variant="subtitle2" // Changed to smaller variant
-            line={2}
-            sx={{
-              color: 'text.primary',
-              fontWeight: 600,
-              fontSize: { xs: '0.8rem', sm: '0.9rem' }, // Smaller font on mobile
-              lineHeight: 1.2,
-              textAlign: 'center',
-              maxHeight: { xs: 32, sm: 40 }, // Control text container height
-              overflow: 'hidden',
-            }}
-          >
-            {category.name}
-          </TextMaxLine>
-        </Stack>
-
-        {/* Tap ripple effect */}
-        <m.div
-          initial={{ scale: 0, opacity: 0.5 }}
-          animate={{ scale: 0, opacity: 0 }}
-          whileTap={{ scale: 2, opacity: 0 }}
-          transition={{ duration: 0.4 }}
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            width: 20,
-            height: 20,
-            borderRadius: '50%',
-            background: 'rgba(25, 118, 210, 0.3)',
-            transform: 'translate(-50%, -50%)',
-            pointerEvents: 'none',
-          }}
-        />
-      </Paper>
-    </Link>
   );
 }
