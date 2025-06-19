@@ -41,7 +41,7 @@ export default function ServiceHero() {
       />
 
       <IconButton
-        onClick={() => router.back()}
+        onClick={() => router.push('/')}
         sx={{
           position: 'absolute',
           top: 16,

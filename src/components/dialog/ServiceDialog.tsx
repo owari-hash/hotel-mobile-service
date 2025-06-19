@@ -145,7 +145,7 @@ export default function ServiceDialog({ open, onClose, service }: ServiceDialogP
               addToCart();
             }}
           >
-            Сагс
+            Сагслах
           </Button>
         </Stack>
       </DialogContent>

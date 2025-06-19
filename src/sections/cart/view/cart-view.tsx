@@ -1,17 +1,23 @@
 'use client';
 
-import { useState } from 'react';
+import { useSnackbar } from 'notistack';
+import { useRouter } from 'next/navigation';
+import { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
+import Dialog from '@mui/material/Dialog';
+import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
 
-import { paths } from 'src/routes/paths';
 import Iconify from 'src/components/iconify';
-import { RouterLink } from 'src/routes/components';
 import MobileContainer from 'src/components/shared/mobile-container';
 
 import { useCart } from '../context/cart-context';
@@ -22,16 +28,43 @@ import CartSummary from './cart-summary';
 
 export default function CartView() {
   const theme = useTheme();
+  const { enqueueSnackbar } = useSnackbar(); // Re-added enqueueSnackbar initialization
+  const router = useRouter();
   const { items, removeItem, updateQuantity } = useCart();
   const [language, setLanguage] = useState<string>('mn');
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const [itemToRemoveId, setItemToRemoveId] = useState<string | null>(null);
 
   const toggleLanguage = () => {
     setLanguage((prev) => (prev === 'mn' ? 'en' : 'mn'));
   };
 
-  const handleRemoveItem = (id: string) => {
-    removeItem(id);
-  };
+  const handleRemoveItem = useCallback((id: string) => {
+    setItemToRemoveId(id);
+    setOpenConfirm(true);
+  }, []);
+
+  const handleConfirmRemove = useCallback(() => {
+    if (itemToRemoveId) {
+      try {
+        removeItem(itemToRemoveId);
+        enqueueSnackbar(language === 'mn' ? 'Амжилттай устгагдлаа!' : 'Successfully removed!', {
+          variant: 'success',
+        });
+      } catch (error) {
+        enqueueSnackbar(language === 'mn' ? 'Устгахад алдаа гарлаа.' : 'Failed to remove item.', {
+          variant: 'error',
+        });
+      }
+    }
+    setOpenConfirm(false);
+    setItemToRemoveId(null);
+  }, [enqueueSnackbar, itemToRemoveId, language, removeItem]);
+
+  const handleCancelRemove = useCallback(() => {
+    setOpenConfirm(false);
+    setItemToRemoveId(null);
+  }, []);
 
   const handleQuantityChange = (id: string, change: number) => {
     const item = items.find((i) => i.id === id);
@@ -59,8 +92,7 @@ export default function CartView() {
             sx={{ px: 2, py: 1.5 }}
           >
             <IconButton
-              component={RouterLink}
-              href={paths.service.root}
+              onClick={() => router.back()}
               sx={{
                 bgcolor: 'background.default',
                 boxShadow: theme.customShadows.z8,
@@ -76,7 +108,7 @@ export default function CartView() {
             </IconButton>
 
             <Typography variant="h6" sx={{ fontWeight: 600 }}>
-              {language === 'mn' ? 'Сагс' : 'Cart'}
+              {language === 'mn' ? 'Сагслах' : 'Cart'}
             </Typography>
 
             <IconButton
@@ -127,6 +159,25 @@ export default function CartView() {
           )}
         </Container>
       </Box>
+
+      <Dialog open={openConfirm} onClose={handleCancelRemove}>
+        <DialogTitle>{language === 'mn' ? 'Баталгаажуулах' : 'Confirm Deletion'}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {language === 'mn'
+              ? 'Та энэ зүйлийг сагснаас устгахдаа итгэлтэй байна уу?'
+              : 'Are you sure you want to remove this item from your cart?'}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancelRemove} color="inherit">
+            {language === 'mn' ? 'Үгүй' : 'No'}
+          </Button>
+          <Button onClick={handleConfirmRemove} color="error" autoFocus>
+            {language === 'mn' ? 'Тийм' : 'Yes'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </MobileContainer>
   );
 }

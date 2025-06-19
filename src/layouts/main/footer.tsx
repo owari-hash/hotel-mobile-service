@@ -1,13 +1,13 @@
+import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Collapse from '@mui/material/Collapse';
-import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
 import Iconify from 'src/components/iconify';
 import { usePathname } from 'src/routes/hooks';
-import { useBoolean } from 'src/hooks/use-boolean';
 import { RouterLink } from 'src/routes/components';
+import { useBoolean } from 'src/hooks/use-boolean';
 
 import { NavListProps } from './nav/types';
 
@@ -17,8 +17,12 @@ import { NavListProps } from './nav/types';
 
 export default function Footer() {
   return (
-    <Container
+    <Box
       sx={{
+        width: { xs: '100%', sm: '80%', lg: '40%' },
+        mx: 'auto',
+        pt: 0,
+        px: 0,
         textAlign: 'center',
         py: { xs: 2, sm: 3 },
         mb: 0,
@@ -26,8 +30,6 @@ export default function Footer() {
         borderRadius: 2,
         boxShadow: (theme) => theme.customShadows.z8,
       }}
-      disableGutters
-      maxWidth={false}
     >
       <Stack spacing={2}>
         <Stack
@@ -73,7 +75,7 @@ export default function Footer() {
           © 2025. Бүх эрх хуулиар хамгаалагдсан.
         </Typography>
       </Stack>
-    </Container>
+    </Box>
   );
 }
 

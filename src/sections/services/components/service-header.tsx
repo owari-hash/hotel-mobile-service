@@ -18,7 +18,7 @@ export default function ServiceHeader({ title, language, onLanguageToggle }: Ser
   return (
     <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ px: 2, py: 1 }}>
       <IconButton
-        onClick={() => router.back()}
+        onClick={() => router.push('/')}
         sx={{
           bgcolor: 'background.default',
           boxShadow: theme.customShadows.z8,

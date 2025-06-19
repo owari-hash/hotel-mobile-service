@@ -28,7 +28,10 @@ export default function ServiceCard({ service, language, onOrderClick }: Service
   return (
     <Card
       sx={{
-        p: 0, // Reset card padding
+        px: 0,
+        minHeight: 150, // Set a minimum height for the card
+        display: 'flex', // Use flexbox for the card content
+        alignItems: 'stretch', // Stretch items to fill the height
         transition: 'all 0.2s ease-in-out',
         '&:hover': {
           boxShadow: theme.customShadows.z16,
@@ -45,21 +48,20 @@ export default function ServiceCard({ service, language, onOrderClick }: Service
               position: 'relative',
               overflow: 'hidden',
               borderRadius: 2,
-              m: 3, // Equal margin on all sides
+              m: 3,
             }}
           >
-            {service.image && (
-              <Image
-                src={service.image}
-                alt={service.title}
-                fill
-                style={{
-                  objectFit: 'cover',
-                  borderRadius: '16px',
-                }}
-                priority
-              />
-            )}
+            <Image
+              src={service.image || '/assets/placeholder.svg'}
+              alt={service.title}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              style={{
+                objectFit: 'cover',
+                borderRadius: '16px',
+              }}
+              priority
+            />
           </Box>
 
           <Box sx={{ px: 3, pb: 3 }}>
@@ -87,33 +89,27 @@ export default function ServiceCard({ service, language, onOrderClick }: Service
           </Box>
         </>
       ) : (
-        <Stack
-          direction="row"
-          spacing={1}
-          alignItems="center"
-          sx={{ height: '100%', width: '100%' }}
-        >
+        <Stack direction="row" spacing={1} alignItems="stretch" sx={{ height: 150, width: '100%' }}>
           <Box
             sx={{
               width: 160, // Fixed width for the image container
-              height: 130, // Fixed height for the image container (square)
+              height: '100%', // Make height fill parent
               flexShrink: 0, // Prevent image from shrinking
               position: 'relative',
               overflow: 'hidden',
               borderRadius: 1, // Use a slight border radius, not circular
             }}
           >
-            {service.image && (
-              <Image
-                src={service.image}
-                alt={service.title}
-                fill
-                style={{
-                  objectFit: 'cover',
-                }}
-                priority
-              />
-            )}
+            <Image
+              src={service.image || '/assets/placeholder.svg'}
+              alt={service.title}
+              fill
+              sizes="160px"
+              style={{
+                objectFit: 'cover',
+              }}
+              priority
+            />
           </Box>
           <Stack spacing={1} sx={{ flexGrow: 1, justifyContent: 'space-between', p: 1 }}>
             <Box>

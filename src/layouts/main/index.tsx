@@ -8,6 +8,7 @@ import { HEADER } from '../config-layout';
 
 import Header from './header';
 import Footer from './footer';
+import BottomNavbar from './bottom-navbar';
 
 // ----------------------------------------------------------------------
 
@@ -41,6 +42,7 @@ export default function MainLayout({ children }: Props) {
       </Box>
 
       <Footer />
+      <BottomNavbar />
     </Box>
   );
 }

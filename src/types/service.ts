@@ -30,6 +30,7 @@ export type Service = {
   subcategory?: string;
 
   icon: string;
+  image?: string; // Added image property
   price?: number;
   location?: string;
   deadline?: string;

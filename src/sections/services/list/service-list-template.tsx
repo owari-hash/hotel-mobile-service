@@ -1,22 +1,23 @@
 'use client';
 
+import groupBy from 'lodash/groupBy';
 import { useRouter } from 'next/navigation';
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useMemo, useState, useEffect, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import { Chip } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import { useTheme } from '@mui/material/styles';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
 
 import { Service } from 'src/types/service';
 import Iconify from 'src/components/iconify';
 import { _servicesByCategories } from 'src/_mock/_services';
 import ServiceDialog from 'src/components/dialog/ServiceDialog';
 import ServiceCard from 'src/components/service-card/service-card';
-import { ROOM_SERVICES, ROOM_SUBCATEGORIES } from 'src/_mock/_room-services';
 import { TAXI_SERVICES, TAXI_SUBCATEGORIES } from 'src/_mock/_taxi-services';
+import { ROOM_SERVICES, ROOM_SUBCATEGORIES } from 'src/_mock/_room-services';
 import { FOOD_SERVICES, FOOD_SUBCATEGORIES } from 'src/_mock/_food-services';
 import { EXTRA_SERVICES, EXTRA_SUBCATEGORIES } from 'src/_mock/_extra-services';
 import { GUIDE_SERVICES, GUIDE_SUBCATEGORIES } from 'src/_mock/_guide-services';
@@ -24,13 +25,6 @@ import {
   ENTERTAINMENT_SERVICES,
   ENTERTAINMENT_SUBCATEGORIES,
 } from 'src/_mock/_entertainment-services';
-
-type CategoryColor = 'success' | 'info' | 'warning' | 'default' | 'primary';
-type CategoryChip = {
-  label: string;
-  icon: string;
-  color: CategoryColor;
-};
 
 interface ServiceListTemplateProps {
   categoryName: string;
@@ -43,63 +37,8 @@ interface ServiceListTemplateProps {
 export default function ServiceListTemplate({ categoryName }: ServiceListTemplateProps) {
   const theme = useTheme();
   const router = useRouter();
-  const [activeCategory, setActiveCategory] = useState<string>('');
-  const [activeSubcategory, setActiveSubcategory] = useState<string>('Бүгд'); // Default to 'Бүгд'
-  const [language, setLanguage] = useState<string>('mn'); // 'mn' for Mongolian, 'en' for English
-  const categoryRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
-  const categoryBarRef = useRef<HTMLDivElement>(null);
 
-  // Dialog state
-  const [openDialog, setOpenDialog] = useState(false);
-  const [selectedService, setSelectedService] = useState<any>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const viewportHeight = window.innerHeight;
-      let currentActive = '';
-
-      Object.entries(categoryRefs.current).forEach(([categoryId, ref]) => {
-        if (ref) {
-          const { top, bottom } = ref.getBoundingClientRect();
-          // Check if the category is in the middle of the viewport
-          if (top < viewportHeight / 2 && bottom > viewportHeight / 2) {
-            currentActive = categoryId;
-          }
-        }
-      });
-
-      if (currentActive) {
-        setActiveCategory(currentActive);
-      }
-    };
-
-    handleScroll(); // Check initial position
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const scrollCategoryIntoView = (categoryId: string) => {
-    const categoryButton = document.getElementById(`category-${categoryId}`);
-    if (categoryButton && categoryBarRef.current) {
-      const scrollContainer = categoryBarRef.current;
-      const buttonLeft = categoryButton.offsetLeft;
-      const containerWidth = scrollContainer.offsetWidth;
-      const scrollPosition = buttonLeft - containerWidth / 2 + categoryButton.offsetWidth / 2;
-
-      scrollContainer.scrollTo({
-        left: scrollPosition,
-        behavior: 'auto',
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (activeCategory) {
-      scrollCategoryIntoView(activeCategory);
-    }
-  }, [activeCategory]);
-
-  const getServicesByCategory = (name: string) => {
+  const getServicesByCategory = useCallback((name: string) => {
     switch (name) {
       case 'Өрөөний үйлчилгээ':
         return ROOM_SERVICES;
@@ -116,9 +55,9 @@ export default function ServiceListTemplate({ categoryName }: ServiceListTemplat
       default:
         return [];
     }
-  };
+  }, []);
 
-  const getSubcategoriesForCategory = (name: string) => {
+  const getSubcategoriesForCategory = useCallback((name: string) => {
     switch (name) {
       case 'Хоол':
         return FOOD_SUBCATEGORIES;
@@ -135,7 +74,87 @@ export default function ServiceListTemplate({ categoryName }: ServiceListTemplat
       default:
         return [];
     }
-  };
+  }, []);
+
+  const sectionRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const categoryBarRef = useRef<HTMLDivElement>(null);
+  const stickyHeaderRef = useRef<HTMLDivElement>(null);
+
+  const scrollSectionIntoView = useCallback((sectionId: string) => {
+    const sectionButton = document.getElementById(`category-${sectionId}`);
+    if (sectionButton && categoryBarRef.current) {
+      const scrollContainer = categoryBarRef.current;
+      const buttonLeft = sectionButton.offsetLeft;
+      const containerWidth = scrollContainer.offsetWidth;
+      const scrollPosition = buttonLeft - containerWidth / 2 + sectionButton.offsetWidth / 2;
+
+      scrollContainer.scrollTo({
+        left: scrollPosition,
+        behavior: 'auto',
+      });
+    }
+  }, []);
+
+  const scrollToContentSection = useCallback((sectionId: string) => {
+    const sectionElement = sectionRefs.current[sectionId];
+    if (sectionElement) {
+      const headerOffset = stickyHeaderRef.current ? stickyHeaderRef.current.offsetHeight : 0;
+      window.scrollTo({
+        top: sectionElement.offsetTop - headerOffset,
+        behavior: 'smooth',
+      });
+    }
+  }, []);
+
+  const [activeSection, setActiveSection] = useState<string>('');
+  const [activeSubcategory, setActiveSubcategory] = useState<string>(() => {
+    const subcategories = getSubcategoriesForCategory(categoryName);
+    return subcategories.length > 0 ? subcategories[0].name : categoryName;
+  });
+  const [language, setLanguage] = useState<string>('mn'); // 'mn' for Mongolian, 'en' for English
+
+  // Dialog state
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedService, setSelectedService] = useState<any>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const viewportHeight = window.innerHeight;
+      let currentActive = '';
+
+      Object.entries(sectionRefs.current).forEach(([sectionId, ref]) => {
+        if (ref) {
+          const { top, bottom } = ref.getBoundingClientRect();
+          const headerOffset = stickyHeaderRef.current ? stickyHeaderRef.current.offsetHeight : 0;
+          // Check if the section's top is at or above the header, and its bottom is below the header
+          if (top <= headerOffset && bottom > headerOffset) {
+            currentActive = sectionId;
+          }
+        }
+      });
+
+      if (currentActive) {
+        setActiveSection(currentActive);
+        // If there are subcategories, also update activeSubcategory
+        if (getSubcategoriesForCategory(categoryName).length > 0) {
+          setActiveSubcategory(currentActive);
+        } else if (categoryName) {
+          // If no subcategories, set activeSubcategory to the main category name
+          setActiveSubcategory(categoryName);
+        }
+      }
+    };
+
+    handleScroll(); // Check initial position
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [categoryName, getSubcategoriesForCategory]);
+
+  useEffect(() => {
+    if (activeSection) {
+      scrollSectionIntoView(activeSection);
+    }
+  }, [activeSection, scrollSectionIntoView]);
 
   const toggleLanguage = () => {
     setLanguage((prev) => (prev === 'mn' ? 'en' : 'mn'));
@@ -144,20 +163,21 @@ export default function ServiceListTemplate({ categoryName }: ServiceListTemplat
   // Simplified category finding
   const currentCategory = _servicesByCategories.find((cat) => cat.name === categoryName);
 
-  const currentServices = (() => {
+  const groupedServices = useMemo(() => {
     const services = getServicesByCategory(categoryName);
     const subcategories = getSubcategoriesForCategory(categoryName);
 
-    if (subcategories.length > 0 && activeSubcategory !== 'Бүгд') {
-      return services.filter((service) => service.subcategory === activeSubcategory);
+    if (subcategories.length > 0) {
+      return groupBy(services, 'subcategory');
     }
-    return services;
-  })();
+    return { [categoryName]: services }; // If no subcategories, group all under main category name
+  }, [categoryName, getServicesByCategory, getSubcategoriesForCategory]);
 
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
       <Stack spacing={3}>
         <Box
+          ref={stickyHeaderRef}
           sx={{
             position: 'sticky',
             top: 0,
@@ -175,7 +195,7 @@ export default function ServiceListTemplate({ categoryName }: ServiceListTemplat
             sx={{ px: 2, py: 1 }}
           >
             <IconButton
-              onClick={() => router.back()}
+              onClick={() => router.push('/')}
               sx={{
                 bgcolor: 'background.default',
                 boxShadow: theme.customShadows.z8,
@@ -225,25 +245,8 @@ export default function ServiceListTemplate({ categoryName }: ServiceListTemplat
               scrollbarWidth: 'none',
             }}
           >
-            {getSubcategoriesForCategory(categoryName).length > 0 ? (
-              <>
-                <Chip
-                  id="category-Бүгд"
-                  label="Бүгд"
-                  variant={activeSubcategory === 'Бүгд' ? 'filled' : 'outlined'}
-                  color={activeSubcategory === 'Бүгд' ? 'primary' : 'default'}
-                  onClick={() => {
-                    setActiveSubcategory('Бүгд');
-                    scrollCategoryIntoView('Бүгд');
-                  }}
-                  sx={{
-                    minWidth: 80,
-                    '& .MuiChip-label': {
-                      fontWeight: activeSubcategory === 'Бүгд' ? 600 : 400,
-                    },
-                  }}
-                />
-                {getSubcategoriesForCategory(categoryName).map((subcat) => (
+            {getSubcategoriesForCategory(categoryName).length > 0
+              ? getSubcategoriesForCategory(categoryName).map((subcat) => (
                   <Chip
                     key={subcat.name}
                     id={`category-${subcat.name}`}
@@ -252,7 +255,8 @@ export default function ServiceListTemplate({ categoryName }: ServiceListTemplat
                     color={activeSubcategory === subcat.name ? 'primary' : 'default'}
                     onClick={() => {
                       setActiveSubcategory(subcat.name);
-                      scrollCategoryIntoView(subcat.name);
+                      setActiveSection(subcat.name); // Update active section for chip bar highlighting
+                      scrollToContentSection(subcat.name); // Scroll main content to section
                     }}
                     sx={{
                       minWidth: 80,
@@ -261,39 +265,49 @@ export default function ServiceListTemplate({ categoryName }: ServiceListTemplat
                       },
                     }}
                   />
-                ))}
-              </>
-            ) : (
-              currentCategory && (
-                <Stack direction="row" alignItems="center" spacing={1}>
-                  <Chip
-                    id={`category-${currentCategory.id}`}
-                    label={currentCategory.name}
-                    variant="filled"
-                    color="primary"
-                  />
-                </Stack>
-              )
-            )}
+                ))
+              : currentCategory && (
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    <Chip
+                      id={`category-${currentCategory.id}`}
+                      label={currentCategory.name}
+                      variant="filled"
+                      color="primary"
+                    />
+                  </Stack>
+                )}
           </Stack>
         </Box>
 
         <Box sx={{ px: 2, pb: 4 }}>
           {currentCategory && (
             <Stack spacing={2}>
-              <Stack spacing={2}>
-                {currentServices.map((service: Service) => (
-                  <ServiceCard
-                    key={service.id}
-                    service={service}
-                    language={language}
-                    onOrderClick={(serviceData) => {
-                      setSelectedService(serviceData);
-                      setOpenDialog(true);
-                    }}
-                  />
-                ))}
-              </Stack>
+              {Object.entries(groupedServices).map(([sectionName, services]) => (
+                <Box
+                  key={sectionName}
+                  ref={(el: HTMLDivElement | null) => {
+                    sectionRefs.current[sectionName] = el;
+                  }}
+                  sx={{ pt: 2 }} // Add some padding top for better scroll detection
+                >
+                  <Typography variant="h5" sx={{ mb: 2 }}>
+                    {sectionName}
+                  </Typography>
+                  <Stack spacing={2}>
+                    {services.map((service: Service) => (
+                      <ServiceCard
+                        key={service.id}
+                        service={service}
+                        language={language}
+                        onOrderClick={(serviceData) => {
+                          setSelectedService(serviceData);
+                          setOpenDialog(true);
+                        }}
+                      />
+                    ))}
+                  </Stack>
+                </Box>
+              ))}
             </Stack>
           )}
         </Box>

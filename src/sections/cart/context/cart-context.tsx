@@ -10,17 +10,28 @@ import {
   createContext,
 } from 'react';
 
+import {
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  DialogContentText,
+} from '@mui/material';
+
 import { Order } from 'src/types/order';
 import { CartItem } from 'src/types/cart';
-import { Service } from 'src/types/service'; // Import CartItem from new location
+import { Service } from 'src/types/service';
+import { useSnackbar } from 'src/components/snackbar';
 
 type CartContextType = {
   items: CartItem[];
   addItem: (service: Service) => void;
   removeItem: (id: string) => void;
+  confirmRemoveItem: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
-  placeOrder: () => void; // Add placeOrder to context type
+  placeOrder: () => void;
   itemCount: number;
   totalAmount: number;
 };
@@ -29,9 +40,10 @@ const CartContext = createContext<CartContextType>({
   items: [],
   addItem: () => {},
   removeItem: () => {},
+  confirmRemoveItem: () => {},
   updateQuantity: () => {},
   clearCart: () => {},
-  placeOrder: () => {}, // Initialize placeOrder
+  placeOrder: () => {},
   itemCount: 0,
   totalAmount: 0,
 });
@@ -43,6 +55,7 @@ type CartProviderProps = {
 };
 
 export function CartProvider({ children }: CartProviderProps) {
+  const { enqueueSnackbar } = useSnackbar();
   const [items, setItems] = useState<CartItem[]>(() => {
     if (typeof window !== 'undefined') {
       try {
@@ -55,6 +68,9 @@ export function CartProvider({ children }: CartProviderProps) {
     }
     return [];
   });
+
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+  const [itemToRemoveId, setItemToRemoveId] = useState<string | null>(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -83,14 +99,40 @@ export function CartProvider({ children }: CartProviderProps) {
     });
   }, []);
 
-  const removeItem = useCallback((id: string) => {
-    setItems((prevItems) => prevItems.filter((item) => item.id !== id));
+  const removeItem = useCallback(
+    (id: string) => {
+      try {
+        setItems((prevItems) => prevItems.filter((item) => item.id !== id));
+        enqueueSnackbar('Амжилттай устгагдлаа', { variant: 'success' });
+      } catch (error) {
+        console.error('Failed to remove item:', error);
+        enqueueSnackbar('Устгахад алдаа гарлаа', { variant: 'error' });
+      }
+    },
+    [enqueueSnackbar]
+  );
+
+  const confirmRemoveItem = useCallback((id: string) => {
+    setItemToRemoveId(id);
+    setOpenConfirmDialog(true);
   }, []);
+
+  const handleCloseConfirmDialog = () => {
+    setOpenConfirmDialog(false);
+    setItemToRemoveId(null);
+  };
+
+  const handleConfirmRemove = () => {
+    if (itemToRemoveId) {
+      removeItem(itemToRemoveId);
+    }
+    handleCloseConfirmDialog();
+  };
 
   const updateQuantity = useCallback(
     (id: string, quantity: number) => {
       if (quantity <= 0) {
-        removeItem(id);
+        confirmRemoveItem(id);
         return;
       }
 
@@ -98,8 +140,8 @@ export function CartProvider({ children }: CartProviderProps) {
         prevItems.map((item) => (item.id === id ? { ...item, quantity } : item))
       );
     },
-    [removeItem]
-  ); // removeItem is a dependency because it's called inside updateQuantity
+    [confirmRemoveItem]
+  );
 
   const clearCart = useCallback(() => {
     setItems([]);
@@ -113,7 +155,7 @@ export function CartProvider({ children }: CartProviderProps) {
 
   const placeOrder = useCallback(() => {
     if (items.length === 0) {
-      alert('Таны сагс хоосон байна!');
+      enqueueSnackbar('Таны сагс хоосон байна!', { variant: 'warning' });
       return;
     }
 
@@ -126,7 +168,6 @@ export function CartProvider({ children }: CartProviderProps) {
       items,
     };
 
-    // Retrieve existing orders from local storage
     const savedOrders = localStorage.getItem('user_orders');
     const existingOrders: Order[] = savedOrders
       ? JSON.parse(savedOrders).map((order: any) => ({
@@ -135,12 +176,11 @@ export function CartProvider({ children }: CartProviderProps) {
         }))
       : [];
 
-    // Add new order and save back to local storage
     localStorage.setItem('user_orders', JSON.stringify([...existingOrders, newOrder]));
 
-    clearCart(); // Clear the current cart
-    alert('Захиалга амжилттай хийгдлээ!');
-  }, [items, clearCart]);
+    clearCart();
+    enqueueSnackbar('Захиалга амжилттай хийгдлээ!', { variant: 'success' });
+  }, [items, clearCart, enqueueSnackbar]);
 
   const itemCount = items.reduce((count, item) => count + item.quantity, 0);
 
@@ -151,15 +191,47 @@ export function CartProvider({ children }: CartProviderProps) {
       items,
       addItem,
       removeItem,
+      confirmRemoveItem, // Add new function to context value
       updateQuantity,
       clearCart,
-      placeOrder, // Add placeOrder to context value
+      placeOrder,
       itemCount,
       totalAmount,
     }),
-    [items, addItem, removeItem, updateQuantity, clearCart, placeOrder, itemCount, totalAmount]
+    [
+      items,
+      addItem,
+      removeItem,
+      confirmRemoveItem, // Add new function to dependencies
+      updateQuantity,
+      clearCart,
+      placeOrder,
+      itemCount,
+      totalAmount,
+    ]
   );
 
-  return <CartContext.Provider value={contextValue}>{children}</CartContext.Provider>;
+  return (
+    <CartContext.Provider value={contextValue}>
+      {children}
+
+      <Dialog open={openConfirmDialog} onClose={handleCloseConfirmDialog}>
+        <DialogTitle>Баталгаажуулах</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Та энэ зүйлийг сагснаас устгахдаа итгэлтэй байна уу?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseConfirmDialog} color="primary">
+            Үгүй
+          </Button>
+          <Button onClick={handleConfirmRemove} color="primary" autoFocus>
+            Тийм
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </CartContext.Provider>
+  );
 }
 export type { CartItem };

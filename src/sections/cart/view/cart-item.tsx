@@ -30,7 +30,16 @@ export default function CartItem({ item, onRemove, onQuantityChange }: CartItemP
               flexShrink: 0,
             }}
           >
-            <Iconify icon={item.icon} width={24} />
+            {item.image ? (
+              <Box
+                component="img"
+                src={item.image}
+                alt={item.title}
+                sx={{ width: 1, height: 1, objectFit: 'cover', borderRadius: 1 }}
+              />
+            ) : (
+              <Iconify icon={item.icon} width={24} />
+            )}
           </Box>
 
           <Box sx={{ flexGrow: 1, minWidth: 0 }}>
