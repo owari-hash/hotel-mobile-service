@@ -10,6 +10,47 @@ import { ENTERTAINMENT_SERVICES } from './_entertainment-services';
 
 // ----------------------------------------------------------------------
 
+export const _hotelServiceTypes: Category[] = [...Array(5)].map((_, index) => ({
+  id: _mock.id(index),
+  name: _mock.serviceCategories[index],
+  source: 'hotelServiceType',
+  path: paths.service.category(_mock.id(index)),
+  totalService: _mock.number.nativeL(index),
+  image: _mock.image.travel(index),
+}));
+
+export const _hotelServices = [...Array(10)].map((_, index) => ({
+  id: _mock.id(index),
+  product_id: _mock.number.nativeL(index),
+  name: _mock.serviceTitle(index),
+  description: _mock.description(index),
+  price: _mock.number.price(index),
+  image: _mock.image.travel(index),
+  service_type_id: _hotelServiceTypes[index % _hotelServiceTypes.length],
+  active: true,
+}));
+
+export const _hotelRoomAmenityTypes: Category[] = [...Array(3)].map((_, index) => ({
+  id: _mock.id(index),
+  name: _mock.roomAmenityCategories[index],
+  source: 'hotel_room_amenity',
+  path: paths.service.category(_mock.id(index)),
+  totalService: _mock.number.nativeL(index),
+  icon: _mock.image.travel(index),
+}));
+
+export const _hotelRoomAmenities = [...Array(15)].map((_, index) => ({
+  id: _mock.id(index),
+  product_id: _mock.number.nativeL(index),
+  name: _mock.roomAmenityNames[index % _mock.roomAmenityNames.length],
+  icon: _mock.image.travel(index),
+  description: _mock.description(index),
+  amenities_category_id: _hotelRoomAmenityTypes[index % _hotelRoomAmenityTypes.length].id,
+  amenities_category_name: _hotelRoomAmenityTypes[index % _hotelRoomAmenityTypes.length].name,
+  active: true,
+  amenity_type: _mock.number.nativeL(index),
+}));
+
 export const SERVICE_AMENITIES_OPTIONS = [
   { value: 'Wifi', label: 'Wifi' },
   { value: 'Кондишн', label: 'Кондишн' },
@@ -22,6 +63,8 @@ export const SERVICE_AMENITIES_OPTIONS = [
   { value: 'Хүүхдийн тоглоомын өрөө', label: 'Хүүхдийн тоглоомын өрөө' },
   { value: 'Сауна', label: 'Сауна' },
 ];
+
+import { Service, Category } from 'src/types/service';
 
 interface BaseService {
   id: string;
@@ -43,12 +86,17 @@ const ALL_SERVICES: BaseService[] = [
   ...GUIDE_SERVICES,
 ];
 
-export const _service = ALL_SERVICES.map((service, index) => {
+export const _service: Service[] = ALL_SERVICES.map((service, index) => {
   const commonProps = {
     id: service.id,
+    name: service.title, // Map title to name for ProductTemplate
     title: service.title,
     icon: service.icon,
-    category: service.category,
+    category: {
+      id: service.category, // Placeholder, ideally link to actual category object
+      name: service.category,
+      source: 'service' as const, // All these are services
+    } as Category, // Explicitly cast to Category
     subcategory: service.subcategory,
     price: service.price,
     content: service.content || '',
@@ -59,6 +107,12 @@ export const _service = ALL_SERVICES.map((service, index) => {
     ratings: _mock.number.rating(index),
     numberOfReviews: _mock.number.nativeL(index),
     location: _mock.address.fullAddress(index),
+    active: true, // Assuming active by default for mock services
+    categ_id: {
+      id: service.category,
+      name: service.category,
+      source: 'service' as const,
+    } as Category, // Explicitly cast to Category
   };
 
   if (service.category === 'Хоол' && 'mealType' in service) {
@@ -71,15 +125,17 @@ export const _service = ALL_SERVICES.map((service, index) => {
   return commonProps;
 });
 
-export const _servicesByCategories = Array.from(
+export const _servicesByCategories: Category[] = Array.from(
   new Set(ALL_SERVICES.map((service) => service.category))
 ).map((category, index) => {
   const servicesInCategory = ALL_SERVICES.filter((service) => service.category === category);
   const firstService = servicesInCategory[0];
 
+  const slug = category.toLowerCase().replace(/ /g, '-'); // Generate slug from category name
   return {
     id: String(index + 1), // Simple ID generation
     name: category,
+    slug, // Add slug field
     icon:
       (category === 'Өрөөний үйлчилгээ' && '/assets/icons/services/service-bell.svg') ||
       (category === 'Нэмэлт үйлчилгээ' && '/assets/icons/services/service-extra.svg') ||
@@ -95,23 +151,17 @@ export const _servicesByCategories = Array.from(
       (category === 'Энтертайнмент' && '/assets/Food/food.jpg') ||
       (category === 'Такси' && '/assets/Food/food.jpg') ||
       (category === 'Хөтөч' && '/assets/Food/food.jpg') ||
+      (category === 'test' && '/assets/Food/food.jpg') ||
       '/assets/images/category_default.jpg', // Fallback to default image
-    path:
-      (category === 'Өрөөний үйлчилгээ' && paths.service.room) ||
-      (category === 'Нэмэлт үйлчилгээ' && paths.service.extra) ||
-      (category === 'Хоол' && paths.service.food) ||
-      (category === 'Энтертайнмент' && paths.service.entertainment) ||
-      (category === 'Такси' && paths.service.taxi) ||
-      (category === 'Хөтөч' && paths.service.guide) ||
-      paths.service.root, // Fallback to root
+    path: paths.service.details(slug), // Use dynamic path with slug
+    source: 'service' as const, // Explicitly define source
     subcategories: Array.from(
       new Set(servicesInCategory.map((service) => service.subcategory))
     ).map((subcategory, subIndex) => ({
       id: `${index + 1}-${subIndex + 1}`,
-      name: subcategory,
-      path:
-        paths.service[category.toLowerCase().replace(/ /g, '') as keyof typeof paths.service] ||
-        paths.service.root, // Subcategory path might need more specific routing
+      name: subcategory || '', // Ensure name is a string
+      path: paths.service.details(slug), // Subcategory path also uses dynamic slug
+      icon: firstService.icon, // Use the icon of the first service in the category for subcategories
     })),
   };
 });

@@ -7,15 +7,15 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import TextMaxLine from 'src/components/text-max-line';
-import { IHotelCategoryProps } from 'src/types/service';
+import { Category } from 'src/types/service';
 
 type CategoryCardProps = {
-  category: IHotelCategoryProps;
+  category: Category;
 };
 
 export default function CategoryCard({ category }: CategoryCardProps) {
   return (
-    <Link href={category.path} style={{ textDecoration: 'none' }}>
+    <Link href={category.path || '#'} style={{ textDecoration: 'none' }}>
       <Card
         component={m.div}
         whileTap={{ scale: 0.97 }}
@@ -39,28 +39,29 @@ export default function CategoryCard({ category }: CategoryCardProps) {
         <Box
           sx={{
             width: '100%',
-            pt: '75%', // 4:3 aspect ratio
-            borderRadius: 1.5,
-            overflow: 'hidden',
-            flexShrink: 0,
-            bgcolor: 'background.neutral',
-            backgroundImage: `url(${category.image})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            mb: 2,
+            height: 200, // Give it a fixed height to ensure visibility
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            textAlign: 'center', // Center text horizontally
           }}
-        />
-
-        <Stack spacing={0.5} sx={{ flexGrow: 1 }}>
-          <TextMaxLine variant="subtitle2" line={2} sx={{ fontWeight: 600 }}>
-            {category.name}
-          </TextMaxLine>
-          {category.totalService && (
-            <Typography variant="caption" sx={{ color: 'text.disabled' }}>
-              {category.totalService} үйлчилгээ
+        >
+          <Stack spacing={0.5} sx={{ flexGrow: 1, p: 2 }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+              {category.name}
             </Typography>
-          )}
-        </Stack>
+            {category.complete_name && (
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                {category.complete_name}
+              </Typography>
+            )}
+            {category.description && (
+              <Typography variant="caption" sx={{ color: 'text.disabled' }}>
+                {category.description}
+              </Typography>
+            )}
+          </Stack>
+        </Box>
       </Card>
     </Link>
   );

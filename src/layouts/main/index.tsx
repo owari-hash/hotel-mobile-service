@@ -9,6 +9,7 @@ import { HEADER } from '../config-layout';
 import Header from './header';
 import Footer from './footer';
 import BottomNavbar from './bottom-navbar';
+import { useResponsive } from 'src/hooks/use-responsive';
 
 // ----------------------------------------------------------------------
 
@@ -23,12 +24,13 @@ type Props = {
 export default function MainLayout({ children }: Props) {
   const pathname = usePathname();
 
+  const upMd = useResponsive('up', 'md');
+
   const actionPage = (arr: string[]) => arr.some((path) => pathname.startsWith(path));
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: 1 }}>
       <Header headerOnDark={actionPage(pathsOnDark)} />
-
       <Box
         component="main"
         sx={{
@@ -40,7 +42,6 @@ export default function MainLayout({ children }: Props) {
 
         {children}
       </Box>
-
       <Footer />
       <BottomNavbar />
     </Box>

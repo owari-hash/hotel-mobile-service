@@ -3,7 +3,7 @@ import { Chip, Stack } from '@mui/material';
 import Iconify from 'src/components/iconify';
 
 type CategoryBarProps = {
-  categories: Array<{ id: string; name: string; icon: string }>;
+  categories: Array<{ id: string; name: string; icon?: string }>;
   activeCategory: string;
   onCategoryClick: (id: string) => void;
   categoryBarRef: React.RefObject<HTMLDivElement>;
@@ -37,13 +37,15 @@ export default function CategoryBar({
           color={activeCategory === category.id ? 'primary' : 'default'}
           onClick={() => onCategoryClick(category.id)}
           icon={
-            <Iconify
-              icon={category.icon}
-              width={20}
-              sx={{
-                color: activeCategory === category.id ? 'common.white' : 'primary.main',
-              }}
-            />
+            category.icon ? (
+              <Iconify
+                icon={category.icon}
+                width={20}
+                sx={{
+                  color: activeCategory === category.id ? 'common.white' : 'primary.main',
+                }}
+              />
+            ) : undefined
           }
           sx={{
             px: 1,

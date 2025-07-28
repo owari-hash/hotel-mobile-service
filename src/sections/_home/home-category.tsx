@@ -4,18 +4,69 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
+import CircularProgress from '@mui/material/CircularProgress';
+import Alert from '@mui/material/Alert';
+import MobileContainer from 'src/components/mobile-container';
 
-import { IHotelCategoryProps } from 'src/types/service';
+import { useGetProductCategories } from 'src/api/service';
+import { Category } from 'src/types/service';
 
 import CategoryCard from './components/category-card';
+import { HOST_API, ASSETS_API } from 'src/config-global';
 
 // ----------------------------------------------------------------------
+export default function HomeLandingHotCategories() {
+  const { productCategories, productCategoriesLoading, productCategoriesError } =
+    useGetProductCategories();
 
-type Props = {
-  categories: IHotelCategoryProps[];
-};
+  const isLoading = productCategoriesLoading;
+  const isError = productCategoriesError;
 
-export default function HomeLandingHotCategories({ categories }: Props) {
+  const combinedCategories: Category[] = [];
+  const existingIds = new Set<string>();
+
+  console.log('Raw productCategories data:', productCategories);
+
+  const { data } = useGetProductCategories();
+  console.log(data); // Check structure here
+  const addCategory = (category: Category) => {
+    if (!existingIds.has(category.id)) {
+      combinedCategories.push(category);
+      existingIds.add(category.id);
+    }
+  };
+
+  if (productCategories) {
+    productCategories.forEach((c) => {
+      addCategory({
+        id: String(c.id),
+        name: c.name,
+        complete_name: c.complete_name,
+        parent_path: c.parent_path,
+        parent_id: c.parent,
+        source: 'product' as const,
+        path: `/service/category/${c.id}?type=product`,
+      });
+    });
+  }
+  if (isLoading) {
+    return (
+      <Stack alignItems="center" justifyContent="center" sx={{ height: 200 }}>
+        <CircularProgress />
+        <Typography variant="subtitle2" sx={{ mt: 2 }}>
+          Уншиж байна...
+        </Typography>
+      </Stack>
+    );
+  }
+  if (isError) {
+    return (
+      <Stack alignItems="center" justifyContent="center" sx={{ height: 200 }}>
+        <Alert severity="error">Сервертэй холбогдоход алдаа гарлаа</Alert>
+      </Stack>
+    );
+  }
+
   return (
     <LazyMotion features={domAnimation}>
       <Box
@@ -60,8 +111,8 @@ export default function HomeLandingHotCategories({ categories }: Props) {
                   height: 6,
                   borderRadius: 3,
                   background: (theme) => `linear-gradient(90deg,
-                    ${theme.palette.primary.main},
-                    ${theme.palette.primary.light})`,
+                      ${theme.palette.primary.main},
+                      ${theme.palette.primary.light})`,
                 }}
               />
 
@@ -72,9 +123,9 @@ export default function HomeLandingHotCategories({ categories }: Props) {
                   fontWeight: 800,
                   textAlign: 'center',
                   background: (theme) => `linear-gradient(135deg,
-                    ${theme.palette.primary.dark} 0%,
-                    ${theme.palette.primary.main} 50%,
-                    ${theme.palette.primary.light} 100%)`,
+                      ${theme.palette.primary.dark} 0%,
+                      ${theme.palette.primary.main} 50%,
+                      ${theme.palette.primary.light} 100%)`,
                   backgroundClip: 'text',
                   WebkitBackgroundClip: 'text',
                   color: 'transparent',
@@ -84,22 +135,8 @@ export default function HomeLandingHotCategories({ categories }: Props) {
               >
                 Бидний үйлчилгээ
               </Typography>
-
-              <Typography
-                variant="body2"
-                sx={{
-                  color: 'text.secondary',
-                  textAlign: 'center',
-                  maxWidth: 280,
-                  lineHeight: 1.5,
-                  px: { xs: 1, sm: 0 },
-                }}
-              >
-                Таны хэрэгцээнд тохирсон үйлчилгээг сонгоод эхлээрэй
-              </Typography>
             </Stack>
           </m.div>
-
           <Box
             sx={{
               display: 'grid',
@@ -108,9 +145,10 @@ export default function HomeLandingHotCategories({ categories }: Props) {
               position: 'relative',
             }}
           >
-            {categories.map((category) => (
-              <CategoryCard key={category.id} category={category} />
-            ))}
+            {combinedCategories.map((category) => {
+              console.log('Rendering category:', category); // Add this line for debugging
+              return <CategoryCard key={category.id} category={category} />;
+            })}
           </Box>
         </Container>
       </Box>

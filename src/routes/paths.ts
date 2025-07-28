@@ -3,12 +3,9 @@
 export const paths = {
   service: {
     root: '/service',
-    room: '/service/room-service',
-    food: '/service/food-service',
-    extra: '/service/extra-service',
-    entertainment: '/service/entertainment-service',
-    taxi: '/service/taxi-service',
-    guide: '/service/guide-service',
+    // Dynamic service page with slug
+    details: (id: string) => `/service/${id}`, // Changed slug to id
+    category: (id: string) => `/service/category/${id}`,
   },
 
   help: '/help', // Add new path for the help page

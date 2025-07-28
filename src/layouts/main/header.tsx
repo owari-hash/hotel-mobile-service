@@ -35,9 +35,7 @@ export default function Header({ headerOnDark = false }: Props) {
           height: 1,
           px: { lg: 5 },
         }}
-      >
-        {/* Add your top header content here if needed */}
-      </Toolbar>
+      ></Toolbar>
     </AppBar>
   );
 }

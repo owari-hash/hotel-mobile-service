@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { TransitionProps } from '@mui/material/transitions';
 import {
@@ -19,50 +19,11 @@ import {
 } from '@mui/material';
 
 import { useCart } from 'src/sections/cart/context/cart-context';
+import { useGetProductCategories } from 'src/api/service'; // Changed back to useGetProductCategories
 
 import Iconify from '../iconify/iconify';
-import { Service } from '../../types/service';
+import { Service, Category } from '../../types/service';
 import { RouterLink } from '../../routes/components';
-
-// Mock data for service categories
-const SERVICE_CATEGORIES = [
-  {
-    id: '1',
-    name: 'Өрөөний үйлчилгээ',
-    icon: 'carbon:clean',
-    path: '/service/room-service',
-  },
-  {
-    id: '2',
-    name: 'Нэмэлт үйлчилгээ',
-    icon: 'carbon:add-alt',
-    path: '/service/extra-service',
-  },
-  {
-    id: '3',
-    name: 'Хоол',
-    icon: 'carbon:restaurant',
-    path: '/service/food-service',
-  },
-  {
-    id: '4',
-    name: 'Энтертайнмент',
-    icon: 'carbon:game-console',
-    path: '/service/entertainment-service',
-  },
-  {
-    id: '5',
-    name: 'Такси',
-    icon: 'carbon:taxi',
-    path: '/service/taxi-service',
-  },
-  {
-    id: '6',
-    name: 'Хөтөч',
-    icon: 'carbon:compass',
-    path: '/service/guide-service',
-  },
-];
 
 const Transition = React.forwardRef(
   (props: TransitionProps & { children: React.ReactElement }, ref: React.Ref<unknown>) => (
@@ -88,6 +49,20 @@ export default function ServiceMenuDialog({
   selectedService = null, // Default to null
 }: Props) {
   const { addItem } = useCart();
+  const { productCategories, productCategoriesLoading, productCategoriesError } =
+    useGetProductCategories(); // Changed back to useGetProductCategories
+
+  const categoriesToDisplay = useMemo(() => {
+    // Display all product categories for now, let user specify exclusions if needed
+    const filtered =
+      productCategories?.map((category) => ({
+        id: String(category.id),
+        name: category.name,
+        icon: category.icon || '', // Ensure icon is handled
+        path: `/service/category/${category.id}`, // Construct path dynamically
+      })) || [];
+    return filtered;
+  }, [productCategories]);
 
   const handleAddToCart = () => {
     if (selectedService) {
@@ -119,34 +94,40 @@ export default function ServiceMenuDialog({
 
       <DialogContent dividers>
         <List disablePadding>
-          {SERVICE_CATEGORIES.map((category) => (
-            <ListItem key={category.id} disableGutters>
-              <ListItemButton
-                component={RouterLink}
-                href={category.path}
-                onClick={() => {
-                  onSelectCategory(category);
-                  onClose();
-                }}
-                sx={{
-                  border: '1px solid',
-                  borderColor: 'divider',
-                  borderRadius: 1,
-                  '&:hover': {
-                    borderColor: 'primary.main',
-                  },
-                }}
-              >
-                <ListItemIcon>
-                  <Iconify icon={category.icon} width={24} />
-                </ListItemIcon>
-                <ListItemText
-                  primary={category.name}
-                  primaryTypographyProps={{ fontWeight: 500 }}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
+          {productCategoriesLoading && <Typography>Loading categories...</Typography>}
+          {productCategoriesError && <Typography>Error loading categories.</Typography>}
+          {!productCategoriesLoading && !productCategoriesError && (
+            <List disablePadding>
+              {categoriesToDisplay.map((category) => (
+                <ListItem key={category.id} disableGutters>
+                  <ListItemButton
+                    component={RouterLink}
+                    href={`/service/category/${category.id}`} // Dynamic path based on category ID
+                    onClick={() => {
+                      onSelectCategory(category);
+                      onClose();
+                    }}
+                    sx={{
+                      border: '1px solid',
+                      borderColor: 'divider',
+                      borderRadius: 1,
+                      '&:hover': {
+                        borderColor: 'primary.main',
+                      },
+                    }}
+                  >
+                    <ListItemIcon>
+                      <Iconify icon={category.icon} width={24} />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={category.name}
+                      primaryTypographyProps={{ fontWeight: 500 }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          )}
         </List>
       </DialogContent>
 

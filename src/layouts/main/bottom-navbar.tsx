@@ -6,16 +6,16 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useTheme } from '@mui/material/styles';
 import { Stack, AppBar, Toolbar, Typography } from '@mui/material';
 
-import { Service } from 'src/types/service';
+import { ProductTemplate } from 'src/types/service';
 import Iconify from 'src/components/iconify';
 import ServiceDialog from 'src/components/dialog/ServiceDialog';
 import ServiceMenuDialog from 'src/components/dialog/ServiceMenuDialog';
 
-import { navConfig } from './config-navigation';
+import { navData } from './nav/config-navigation';
 
 export default function BottomNavbar() {
   const [openServiceDialog, setOpenServiceDialog] = useState(false);
-  const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const [selectedService, setSelectedService] = useState<ProductTemplate | null>(null);
 
   const theme = useTheme();
   const pathname = usePathname();
@@ -41,7 +41,7 @@ export default function BottomNavbar() {
               px: 0,
             }}
           >
-            {navConfig.map((item) => {
+            {navData.map((item) => {
               const isActive = pathname === item.path;
               const isService = item.title === 'Үйлчилгээ';
 

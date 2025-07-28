@@ -1,42 +1,34 @@
 'use client';
 
 import { useScroll } from 'framer-motion';
-import { usePathname } from 'next/navigation';
 
 import ScrollProgress from 'src/components/scroll-progress';
 import MobileContainer from 'src/components/shared/mobile-container';
 
 import ServiceHero from '../list/service-hero';
-import ServiceListTemplate from '../list/service-list-template';
+import { useGetProductTemplates } from 'src/api/service'; // Assuming this hook exists
 
 // ----------------------------------------------------------------------
 
-export default function ServiceView() {
+type ServiceViewProps = {
+  id: string;
+};
+
+export default function ServiceView({ id }: ServiceViewProps) {
   const { scrollYProgress } = useScroll();
-  const pathname = usePathname();
+  const { hotelService, hotelServiceLoading, hotelServiceError } = useServiceData(id);
 
-  const getCategoryNameFromPath = (path: string) => {
-    const parts = path.split('/');
-    const servicePart = parts[parts.length - 1]; // e.g., "food-service"
-    switch (servicePart) {
-      case 'room-service':
-        return 'Өрөөний үйлчилгээ';
-      case 'food-service':
-        return 'Хоол';
-      case 'extra-service':
-        return 'Нэмэлт үйлчилгээ';
-      case 'entertainment-service':
-        return 'Энтертайнмент';
-      case 'taxi-service':
-        return 'Такси';
-      case 'guide-service':
-        return 'Хөтөч';
-      default:
-        return '';
-    }
-  };
+  if (hotelServiceLoading) {
+    return <div>Loading hotel service...</div>;
+  }
 
-  const categoryName = getCategoryNameFromPath(pathname);
+  if (hotelServiceError) {
+    return <div>Error loading hotel service.</div>;
+  }
+
+  if (!hotelService) {
+    return <div>Hotel service not found.</div>;
+  }
 
   return (
     <MobileContainer variant="mobile" disableGutters sx={{ mt: 0, pt: 0 }}>
@@ -44,7 +36,12 @@ export default function ServiceView() {
 
       <ServiceHero />
 
-      {categoryName && <ServiceListTemplate categoryName={categoryName} />}
+      {/* You can display product details here */}
+      <div>
+        <h1>{hotelService.product_name || hotelService.service_categ.name}</h1>
+        <p>{hotelService.description}</p>
+        {/* Add more hotel service details as needed */}
+      </div>
     </MobileContainer>
   );
 }
